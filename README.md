@@ -189,6 +189,6 @@ class Media extends Resource
 Refer to the [Changelog](CHANGELOG.md) for a full history of the project.
 
 ## License
-This software released under [Apache License Version 2.0](LICENSE).
+This software released under [Apache License Version 2.0](LICENSE.txt).
 
 (C) 2021 Mostafaznv, All rights reserved.
