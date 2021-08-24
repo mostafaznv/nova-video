@@ -15,9 +15,9 @@ class Video extends File
 
     protected string $attachment = '';
 
-    public function __construct($name, $attribute = null, $disk = 'public', $storageCallback = null)
+    public function __construct($label, $fieldName = null, $disk = 'public', $storageCallback = null)
     {
-        parent::__construct($name, $attribute, $disk, $storageCallback);
+        parent::__construct($label, $fieldName, $disk, $storageCallback);
 
         $this->displayUsing(function($value, $model, $attribute) {
             return $this->attachment ? $model->{$this->attachment} : $value;

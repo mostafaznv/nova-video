@@ -145,6 +145,7 @@ class Media extends Model
     {
         return [
             Attachment::make('video', LaruploadEnum::LIGHT_MODE)
+                ->coverStyle(852, 480, LaruploadEnum::AUTO_STYLE_MODE)
         ];
     }
 }
@@ -176,12 +177,14 @@ class Media extends Resource
 
 > **Note**: When you have defined a larupload attachment entity in your model, you can't use the name of that entity for your nova fields. as you can see in above code, the second argument of make function is `videos`, not `video`.
 
+> **Note**: Larupload has its own disk, so the third argument of make function (disk) is not used when you are using larupload to handle upload process.  
 
 ## Nova Field Notable Methods
 | Name               | Arguments                                  | description                                                                                                                                                                                                                                                                                                                                                                         |
 |--------------------|--------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | storeWithLarupload | string (required) (attachment entity name) | handle whole upload process larupload                                                                                                                                                                                                                                                                                                                                               |
 | prunable           | boolean                                    | The prunable method will instruct Nova to delete the underlying file from storage when the associated model is deleted from the database.<br><br> **Note**: If you are using larupload, you have to keep in mind that larupload will delete files automatically after each delete. to control it, take a look at the larupload documentation and read about preserve file property  |
+| make               | label (field's label), field name, disk    | **Label**: Defines a label for file field <br><br> **Field Name**: Defines the name of <input type='file' \/><br> - without larupload: should be your file column's name <br> - with larupload: when you have defined a larupload attachment entity in your model, you can't use the name of that entity for this argument. use whatever you want, but not the entity's name  <br><br> **Disk**: name of your preferred disk in config/filesystems.php file. <br> Note: Larupload has its own disk, so this argument is not used when you are using larupload to handle upload process. check larupload [documentation](https://github.com/mostafaznv/larupload)     |
 
 
 
