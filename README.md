@@ -145,6 +145,7 @@ class Media extends Model
     {
         return [
             Attachment::make('video', LaruploadEnum::LIGHT_MODE)
+                ->namingMethod(LaruploadEnum::HASH_FILE_NAMING_METHOD)
                 ->coverStyle(852, 480, LaruploadEnum::AUTO_STYLE_MODE)
         ];
     }
@@ -178,6 +179,48 @@ class Media extends Resource
 > **Note**: When you have defined a larupload attachment entity in your model, you can't use the name of that entity for your nova fields. as you can see in above code, the second argument of make function is `videos`, not `video`.
 
 > **Note**: Larupload has its own disk, so the third argument of make function (disk) is not used when you are using larupload to handle upload process.  
+
+
+## Get Video Metadata (Larupload)
+You can print extracted metadata from videos. this feature only works with larupload
+
+```
+<?php
+use Mostafaznv\NovaVideo\Video;
+use Mostafaznv\NovaVideo\VideoMeta;
+
+class Media extends Resource
+{
+    public static string $model = MediaModel::class;
+
+    public function fields(Request $request): array
+    {
+        return [
+            ID::make()->sortable(),
+            Video::make(trans('Video'), 'videos')->storeWithLarupload('video'),
+
+            // print all metadata with this function
+            
+            ...VideoMeta::make('video')->all(),
+
+            // or print them by their function
+            
+            /*VideoMeta::make('video')->fileName(),
+            VideoMeta::make('video')->size(),
+            VideoMeta::make('video')->mimeType(),
+            VideoMeta::make('video')->width(),
+            VideoMeta::make('video')->height(),
+            VideoMeta::make('video')->duration(),
+            VideoMeta::make('video')->format(),*/
+
+        ];
+    }
+}
+```
+
+## Rest API Usage (Larupload)
+check larupload [documentation](https://github.com/mostafaznv/larupload)   
+
 
 ## Nova Field Notable Methods
 | Name               | Arguments                                  | description                                                                                                                                                                                                                                                                                                                                                                         |
