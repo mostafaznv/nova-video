@@ -20,7 +20,7 @@ class Video extends File
         parent::__construct($label, $fieldName, $disk, $storageCallback);
 
         $this->displayUsing(function($value, $model, $attribute) {
-            return $this->attachment ? $model->{$this->attachment} : $value;
+            return $this->attachment ? $model->{$this->attachment}->urls() : $value;
         });
 
         $this->preview(function($value, $disk, $model) {

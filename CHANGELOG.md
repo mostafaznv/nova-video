@@ -2,8 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## v1.0.3 - 2021/08/26
+- bugfix: return $attachment->urls() in displayUsing function
+- bugfix: set original larupload column names for video-meta items to prevent conflict between them 
+
 ## v1.0.2 - 2021/08/25
-- Ability to print extracted metadata from video files 
+- Ability to print extracted metadata from video files
 
 ## v1.0.1 - 2021/08/24
 - Upgrade `Larupload` version
