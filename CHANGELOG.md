@@ -2,6 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
+## v1.0.4 - 2021/08/27
+- fix a bug on trying to get meta items on none larupload files
+
 ## v1.0.3 - 2021/08/26
 - bugfix: return $attachment->urls() in displayUsing function
 - bugfix: set original larupload column names for video-meta items to prevent conflict between them 

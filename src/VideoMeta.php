@@ -28,13 +28,18 @@ class VideoMeta
             ->readonly()
             ->exceptOnForms()
             ->displayUsing(function($value, $model) use ($attachment, $name) {
-                $output = ($attachment and is_a($model->{$attachment}, Attachment::class)) ? $model->{$attachment}->meta($name) : '-';
+                if ($attachment and is_a($model->{$attachment}, Attachment::class)) {
+                    $output = $model->{$attachment}->meta($name);
 
-                if ($name === 'duration') {
-                    $output = $this->humanReadableDuration($output);
+                    if ($name === 'duration') {
+                        $output = $this->humanReadableDuration($output);
+                    }
+                    else if ($name === 'size') {
+                        $output = $this->humanReadableBytes($output);
+                    }
                 }
-                else if ($name === 'size') {
-                    $output = $this->humanReadableBytes($output);
+                else {
+                    $output = '-';
                 }
 
                 return $output;
