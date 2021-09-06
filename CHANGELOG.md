@@ -2,6 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
+## v1.0.5 - 2021/09/06
+- Upgrade larupload version to 0.1.*
+
 ## v1.0.4 - 2021/08/27
 - fix a bug on trying to get meta items on none larupload files
 
