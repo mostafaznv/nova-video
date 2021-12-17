@@ -94,8 +94,12 @@ class VideoMeta
         return $this->meta('format', 'Format');
     }
 
-    protected function humanReadableDuration(int $seconds): string
+    protected function humanReadableDuration(?int $seconds): string
     {
+        if (is_null($seconds)) {
+            return '—';
+        }
+
         $hours = floor($seconds / 3600);
         $minutes = floor($seconds / 60 % 60);
         $seconds = floor($seconds % 60);
@@ -116,8 +120,12 @@ class VideoMeta
         return implode(' ', $output);
     }
 
-    protected function humanReadableBytes(int $bytes): string
+    protected function humanReadableBytes(?int $bytes): string
     {
+        if (is_null($bytes)) {
+            return '—';
+        }
+
         $units = ['B', 'KiB', 'MiB', 'GiB', 'TiB', 'PiB'];
 
         for ($i = 0; $bytes > 1024; $i++) {

@@ -2,6 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
+## v1.0.6 - 2021/12/18
+- bugfix - show "—" instead of null duration in VideoMeta human-readable functions
+
 ## v1.0.5 - 2021/09/06
 - Upgrade larupload version to 0.1.*
 
