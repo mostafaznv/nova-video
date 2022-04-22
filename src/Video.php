@@ -54,6 +54,8 @@ class Video extends File
 
                 return $this->columnsThatShouldBeDeleted();
             }
+
+            return [];
         });
 
         $this->download(function($request, $model) {

@@ -4,8 +4,8 @@
     "keywords": ["laravel", "nova", "video", "video field", "ffmpeg", "stream", "hls", "larupload", "upload video"],
     "license": "MIT",
     "require": {
-        "php": "^7.4|^8.0",
-        "mostafaznv/larupload": "^0.1.0",
+        "php": "^8.0.2",
+        "mostafaznv/larupload": "^0.2.0",
         "ext-json": "*"
     },
     "autoload": {
