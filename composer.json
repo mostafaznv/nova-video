@@ -6,6 +6,7 @@
     "require": {
         "php": "^8.0.2",
         "mostafaznv/larupload": "^0.2.0",
+        "laravel/nova": "^4.0",
         "ext-json": "*"
     },
     "autoload": {
