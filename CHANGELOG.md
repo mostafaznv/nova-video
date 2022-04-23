@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## v3.0.0 - 2022/04/23
+- Support Nova 4.0
+
+## v2.0.0 - 2022/04/22
+- Support Laravel 9
+- Drop support for PHP 7.4
+- Bump dependencies
+
 ## v1.0.6 - 2021/12/18
 - bugfix - show "—" instead of null duration in VideoMeta human-readable functions
 
