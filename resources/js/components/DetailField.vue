@@ -1,6 +1,6 @@
 <template>
-    <panel-item :field="field">
-        <div slot="value">
+    <panel-item :index="index" :field="field">
+        <template #value>
             <template v-if="shouldShowVideo">
                 <video controls :src="src" :autoplay="autoplay" :poster="imageUrl" />
             </template>
@@ -8,21 +8,18 @@
             <span v-else>&mdash;</span>
 
             <p v-if="shouldShowToolbar" class="flex items-center text-sm mt-3">
-                <a v-if="field.downloadable" :dusk="field.attribute + '-download-link'"
-                   tabindex="0" class="cursor-pointer dim btn btn-link text-primary inline-flex items-center"
-                   @keydown.enter.prevent="download"
-                   @click.prevent="download">
-                    <icon class="mr-2" type="download" view-box="0 0 24 24" width="16" height="16" />
+                <link-button v-if="field.downloadable" @keydown.enter.prevent="download" @click.prevent="download" :dusk="field.attribute + '-download-link'" tabindex="0">
+                    <icon class="mr-2" type="download" width="16" height="16" />
                     <span class="class mt-1">{{ __('Download') }}</span>
-                </a>
+                </link-button>
             </p>
-        </div>
+        </template>
     </panel-item>
 </template>
 
 <script>
 export default {
-    props: ['resource', 'resourceName', 'resourceId', 'field'],
+    props: ['resource', 'resourceName', 'resourceId', 'field', 'index'],
     data() {
         return {
             src: this.field.previewUrl,

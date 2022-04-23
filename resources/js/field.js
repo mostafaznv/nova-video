@@ -1,5 +1,9 @@
-Nova.booting((Vue, router) => {
-    Vue.component('index-video', require('./components/IndexField'));
-    Vue.component('detail-video', require('./components/DetailField'));
-    Vue.component('form-video', require('./components/FormField'));
+import IndexField from './components/IndexField'
+import DetailField from './components/DetailField'
+import FormField from './components/FormField'
+
+Nova.booting((Vue) => {
+    Vue.component('index-video', IndexField);
+    Vue.component('detail-video', DetailField);
+    Vue.component('form-video', FormField);
 })
