@@ -30,8 +30,8 @@ You don't need any extra package to use `NovaVideo` field. But if you need more 
 
 ## Requirements:
 
-- PHP 7.4 or higher
-- Laravel 8.* or higher
+- PHP 8.0.2 or higher
+- Laravel 9.* or higher
 - FFMPEG (not required)
 
 
@@ -237,4 +237,4 @@ Refer to the [Changelog](CHANGELOG.md) for a full history of the project.
 ## License
 This software released under [Apache License Version 2.0](LICENSE.txt).
 
-(C) 2021 Mostafaznv, All rights reserved.
+(C) 2022 Mostafaznv, All rights reserved.
