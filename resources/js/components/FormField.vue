@@ -2,7 +2,7 @@
     <default-field :field="field" :errors="errors" :full-width-content="true" :show-help-text="!isReadonly">
         <template #field>
             <div v-if="hasValue" :class="{ 'mb-6': !isReadonly }">
-                <video controls v-if="videoUrl" :src="videoUrl" :autoplay="false" class="mt-4" :poster="imageUrl" />
+                <video controls v-if="videoUrl" :src="videoUrl" :autoplay="false" class="mt-3" :poster="imageUrl" />
 
                 <p v-if="videoUrl && !isReadonly" class="mt-3 flex items-center text-sm">
                     <delete-button :dusk="field.attribute + '-delete-link'" v-if="shouldShowRemoveButton" @click="confirmRemoval">
@@ -34,7 +34,7 @@
                     <p v-if="hasError" class="text-xs mt-2 text-danger">{{ firstError }}</p>
                 </div>
 
-                <div v-if="laruploadIsOn && fileName" class="mt-4">
+                <div v-if="laruploadIsOn && fileName" class="mt-3">
                     <div class="form-file inline-block mr-4">
                         <input ref="thumbnailField" :dusk="field.attribute + '_image'" class="form-file-input select-none" type="file" :id="idAttr + '-thumbnail'" name="thumbnail" @change="thumbnailFileChange" :disabled="isReadonly || thumbnailUploading" accept="image/jpeg,image/png" />
 
