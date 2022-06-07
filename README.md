@@ -28,6 +28,13 @@ You don't need any extra package to use `NovaVideo` field. But if you need more 
 - Ability to create HTTP Live Streaming (HLS) from video sources
 
 
+----
+🚀 If you find this project interesting, please consider supporting me on the open source journey
+
+[![Donate](https://mostafaznv.github.io/donate/donate.svg)](https://mostafaznv.github.io/donate)
+
+----
+
 ## Requirements:
 
 - PHP 8.0.2 or higher
@@ -229,7 +236,12 @@ check larupload [documentation](https://github.com/mostafaznv/larupload)
 | prunable           | boolean                                    | The prunable method will instruct Nova to delete the underlying file from storage when the associated model is deleted from the database.<br><br> **Note**: If you are using larupload, you have to keep in mind that larupload will delete files automatically after each delete. to control it, take a look at the larupload documentation and read about preserve file property  |
 | make               | label (field's label), field name, disk    | **Label**: Defines a label for file field <br><br> **Field Name**: Defines the name of <input type='file' \/><br> - without larupload: should be your file column's name <br> - with larupload: when you have defined a larupload attachment entity in your model, you can't use the name of that entity for this argument. use whatever you want, but not the entity's name  <br><br> **Disk**: name of your preferred disk in config/filesystems.php file. <br> Note: Larupload has its own disk, so this argument is not used when you are using larupload to handle upload process. check larupload [documentation](https://github.com/mostafaznv/larupload)     |
 
+----
+🚀 If you find this project interesting, please consider supporting me on the open source journey
 
+[![Donate](https://mostafaznv.github.io/donate/donate.svg)](https://mostafaznv.github.io/donate)
+
+----
 
 ## Changelog
 Refer to the [Changelog](CHANGELOG.md) for a full history of the project.
