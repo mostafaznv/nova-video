@@ -29,7 +29,7 @@ You don't need any extra package to use `NovaVideo` field. But if you need more 
 
 
 ----
-🚀 If you find this project interesting, please consider supporting me on the open source journey
+I develop in a open-source journey 🚀, I wish I lived in an environment where financial situation was fine and I could only focus on the path, but as you may know, life isn't perfect. <br>So if you end up using my packages, please consider making a donation, any amount would go along way and is much appreciated. 🍺
 
 [![Donate](https://mostafaznv.github.io/donate/donate.svg)](https://mostafaznv.github.io/donate)
 
@@ -237,7 +237,7 @@ check larupload [documentation](https://github.com/mostafaznv/larupload)
 | make               | label (field's label), field name, disk    | **Label**: Defines a label for file field <br><br> **Field Name**: Defines the name of <input type='file' \/><br> - without larupload: should be your file column's name <br> - with larupload: when you have defined a larupload attachment entity in your model, you can't use the name of that entity for this argument. use whatever you want, but not the entity's name  <br><br> **Disk**: name of your preferred disk in config/filesystems.php file. <br> Note: Larupload has its own disk, so this argument is not used when you are using larupload to handle upload process. check larupload [documentation](https://github.com/mostafaznv/larupload)     |
 
 ----
-🚀 If you find this project interesting, please consider supporting me on the open source journey
+I develop in a open-source journey 🚀, I wish I lived in an environment where financial situation was fine and I could only focus on the path, but as you may know, life isn't perfect. <br>So if you end up using my packages, please consider making a donation, any amount would go along way and is much appreciated. 🍺
 
 [![Donate](https://mostafaznv.github.io/donate/donate.svg)](https://mostafaznv.github.io/donate)
 
