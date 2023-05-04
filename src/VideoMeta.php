@@ -24,7 +24,7 @@ class VideoMeta
     {
         $attachment = $this->attachment;
 
-        return Text::make(trans("Video $label"), "{$attachment}_file_$name")
+        return Text::make(trans($label), "{$attachment}_file_$name")
             ->readonly()
             ->exceptOnForms()
             ->displayUsing(function($value, $model) use ($attachment, $name) {
