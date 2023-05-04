@@ -78,7 +78,6 @@ class Video extends File
      *
      * @param string $attachment
      * @return $this
-     * @throws Exception
      */
     public function storeWithLarupload(string $attachment = ''): Video
     {
