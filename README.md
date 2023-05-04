@@ -1,8 +1,7 @@
 # Video Field for Laravel Nova
 
-[![Quality Score](https://img.shields.io/scrutinizer/g/mostafaznv/nova-video.svg?style=flat-square)](https://scrutinizer-ci.com/g/mostafaznv/nova-video)
-[![Latest Version on Packagist](https://img.shields.io/packagist/v/mostafaznv/nova-video.svg?style=flat-square)](https://packagist.org/packages/mostafaznv/nova-video)
 [![Total Downloads](https://img.shields.io/packagist/dt/mostafaznv/nova-video.svg?style=flat-square)](https://packagist.org/packages/mostafaznv/nova-video)
+[![Latest Version on Packagist](https://img.shields.io/packagist/v/mostafaznv/nova-video.svg?style=flat-square)](https://packagist.org/packages/mostafaznv/nova-video)
 
 Upload and display videos in laravel nova
 
