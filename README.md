@@ -10,7 +10,7 @@ This package is an *extended* version of built-in nova *file field* that helps y
 
 You don't need any extra package to use `NovaVideo` field. But if you need more features, we suggest you to use `Larupload` next to the `NovaVideo`.
 
-`NovaVideo` comes with built-in support for `Larupload` package
+`NovaVideo` comes with built-in support for [Larupload](https://github.com/mostafaznv/larupload/) package
 
 
 ## Base features:
@@ -26,14 +26,16 @@ You don't need any extra package to use `NovaVideo` field. But if you need more 
 
 ## Additional features with Larupload:
 
-- Attach poster to video files
-- Extract video metadata such as duration, width, height and dominant color
+- Attach a poster to video files
+- Extract video metadata such as duration, width, height, and dominant color
 - Ability to resize/crop photos and videos
 - Ability to create HTTP Live Streaming (HLS) from video sources
 
 
 ----
-I develop in a open-source journey 🚀, I wish I lived in an environment where financial situation was fine and I could only focus on the path, but as you may know, life isn't perfect. <br>So if you end up using my packages, please consider making a donation, any amount would go along way and is much appreciated. 🍺
+I am on an open-source journey 🚀, and I wish I could solely focus on my development path without worrying about my financial situation. However, as life is not perfect, I have to consider other factors.
+
+Therefore, if you decide to use my packages, please kindly consider making a donation. Any amount, no matter how small, goes a long way and is greatly appreciated. 🍺
 
 [![Donate](https://mostafaznv.github.io/donate/donate.svg)](https://mostafaznv.github.io/donate)
 
@@ -43,8 +45,9 @@ I develop in a open-source journey 🚀, I wish I lived in an environment where 
 
 - PHP 8.1 or higher
 - Laravel 10.4.1 or higher
-- FFMPEG (not required)
+- FFMPEG (optional)
 
+> FFMPEG is required if you wish to use additional features with Larupload.
 
 ## Installation
 
@@ -108,13 +111,14 @@ class Media extends Resource
 }
 ```
 
-> **Note**: The second argument of `make` function is your file column's name.  
-> **Note**: The third argument of `make` function is your preferred disk name
+> The second argument of `make` function is your file column's name.  
+
+> The third argument of `make` function is your preferred disk name.
 
 
 ## Usage with Larupload
 
-1- Install `Larupload` using [this](https://github.com/mostafaznv/larupload/#installation) documentation
+1- Install `Larupload` using [this](https://mostafaznv.gitbook.io/larupload/getting-started/installation) documentation
 
 2- Add Larupload columns to your table
 
@@ -137,9 +141,11 @@ class CreateMediaTable extends Migration
 3- Add larupload trait to your model
 
 ```
+use Mostafaznv\Larupload\Enums\LaruploadMediaStyle;
+use Mostafaznv\Larupload\Enums\LaruploadMode;
+use Mostafaznv\Larupload\Enums\LaruploadNamingMethod;
 use Mostafaznv\Larupload\Storage\Attachment;
 use Mostafaznv\Larupload\Traits\Larupload;
-use Mostafaznv\Larupload\LaruploadEnum;
 
 class Media extends Model
 {
@@ -155,9 +161,9 @@ class Media extends Model
     public function attachments(): array
     {
         return [
-            Attachment::make('video', LaruploadEnum::LIGHT_MODE)
-                ->namingMethod(LaruploadEnum::HASH_FILE_NAMING_METHOD)
-                ->coverStyle(852, 480, LaruploadEnum::AUTO_STYLE_MODE)
+            Attachment::make('video', LaruploadMode::LIGHT)
+                ->namingMethod(LaruploadNamingMethod::HASH_FILE)
+                ->coverStyle('cover', 852, 480, LaruploadMediaStyle::AUTO)
         ];
     }
 }
@@ -187,9 +193,9 @@ class Media extends Resource
 }
 ```
 
-> **Note**: When you have defined a larupload attachment entity in your model, you can't use the name of that entity for your nova fields. as you can see in above code, the second argument of make function is `videos`, not `video`.
+> When you have defined a Larupload attachment entity in your model, you should avoid using the same name for your Nova fields as the entity. As you can see in the code above, the second argument of the make function is `videos`, not `video`.
 
-> **Note**: Larupload has its own disk, so the third argument of make function (disk) is not used when you are using larupload to handle upload process.  
+> Larupload has its own disk, so the third argument of make function (disk) is not used when you are using larupload to handle upload process.  
 
 
 ## Get Video Metadata (Larupload)
@@ -230,27 +236,26 @@ class Media extends Resource
 ```
 
 ## Rest API Usage (Larupload)
-check larupload [documentation](https://github.com/mostafaznv/larupload)   
+Check Larupload [documentation](https://mostafaznv.gitbook.io/larupload/)   
 
 
 ## Nova Field Notable Methods
-| Name               | Arguments                                  | description                                                                                                                                                                                                                                                                                                                                                                         |
-|--------------------|--------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| storeWithLarupload | string (required) (attachment entity name) | handle whole upload process larupload                                                                                                                                                                                                                                                                                                                                               |
-| prunable           | boolean                                    | The prunable method will instruct Nova to delete the underlying file from storage when the associated model is deleted from the database.<br><br> **Note**: If you are using larupload, you have to keep in mind that larupload will delete files automatically after each delete. to control it, take a look at the larupload documentation and read about preserve file property  |
-| make               | label (field's label), field name, disk    | **Label**: Defines a label for file field <br><br> **Field Name**: Defines the name of <input type='file' \/><br> - without larupload: should be your file column's name <br> - with larupload: when you have defined a larupload attachment entity in your model, you can't use the name of that entity for this argument. use whatever you want, but not the entity's name  <br><br> **Disk**: name of your preferred disk in config/filesystems.php file. <br> Note: Larupload has its own disk, so this argument is not used when you are using larupload to handle upload process. check larupload [documentation](https://github.com/mostafaznv/larupload)     |
+| Name               | Arguments                                  | description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
+|--------------------|--------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| storeWithLarupload | string (required) (attachment entity name) | Handle the whole upload process with `Larupload`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
+| prunable           | boolean                                    | The prunable method will instruct Nova to delete the underlying file from storage when the associated model is deleted from the database.<br><br> **Note**: If you are using larupload, you have to keep in mind that larupload will delete files automatically after each delete. to control it, take a look at the larupload documentation and read about `preserve file property`                                                                                                                                                                                                                                                                                                                                             |
+| make               | label (field's label), field name, disk    | **Label**: Defines a label for file field <br><br> **Field Name**: Defines the name of input element `<input type='file' />` <br> — **Without Larupload**: you must provide the name of the file column as the Field Name parameter. <br> — **With Larupload**: when you have defined a larupload attachment entity in your model, you can't use the name of that entity for this argument. use whatever you want, but not the entity's name  <br><br> **Disk**: name of your preferred disk in config/filesystems.php file. <br> Note: Larupload has its own disk, so this argument is not used when you are using larupload to handle upload process. check larupload [documentation](https://github.com/mostafaznv/larupload) |
 
 ----
-I develop in a open-source journey 🚀, I wish I lived in an environment where financial situation was fine and I could only focus on the path, but as you may know, life isn't perfect. <br>So if you end up using my packages, please consider making a donation, any amount would go along way and is much appreciated. 🍺
+I am on an open-source journey 🚀, and I wish I could solely focus on my development path without worrying about my financial situation. However, as life is not perfect, I have to consider other factors.
+
+Therefore, if you decide to use my packages, please kindly consider making a donation. Any amount, no matter how small, goes a long way and is greatly appreciated. 🍺
 
 [![Donate](https://mostafaznv.github.io/donate/donate.svg)](https://mostafaznv.github.io/donate)
 
 ----
 
-## Changelog
-Refer to the [Changelog](CHANGELOG.md) for a full history of the project.
-
 ## License
 This software released under [Apache License Version 2.0](LICENSE.txt).
 
-(C) 2022 Mostafaznv, All rights reserved.
+(C) 2023 Mostafaznv, All rights reserved.
