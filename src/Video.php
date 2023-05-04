@@ -20,12 +20,14 @@ class Video extends File
         parent::__construct($label, $fieldName, $disk, $storageCallback);
 
         $this->displayUsing(function($value, $model, $attribute) {
-            return $this->attachment ? $model->{$this->attachment}->urls() : $value;
+            return $this->attachment ? $model->attachment($this->attachment)->urls() : $value;
         });
 
         $this->preview(function($value, $disk, $model) {
             if ($this->attachment and $model->id) {
-                return $model->{$this->attachment}->url();
+                $this->value = $model->attachment($this->attachment)->url();
+
+                return $this->value;
             }
 
             return $value ? Storage::disk($this->getStorageDisk())->url($value) : null;
@@ -33,7 +35,7 @@ class Video extends File
 
         $this->thumbnail(function($value, $disk, $model) {
             if ($this->attachment and $model->id) {
-                return $model->{$this->attachment}->url('cover');
+                return $model->attachment($this->attachment)->url('cover');
             }
 
             if (is_a($value, 'Mostafaznv\Larupload\Storage\Attachment') and $value->getName() === $this->attribute) {
@@ -45,7 +47,7 @@ class Video extends File
 
         $this->delete(function(Request $request, $model) {
             if ($this->attachment) {
-                $model->{$this->attachment}->detach();
+                $model->attachment($this->attachment)->detach();
 
                 return [];
             }
@@ -60,7 +62,7 @@ class Video extends File
 
         $this->download(function($request, $model) {
             if ($this->attachment) {
-                return $model->{$this->attachment}->download();
+                return $model->attachment($this->attachment)->download();
             }
 
             $name = $this->originalNameColumn ? $model->{$this->originalNameColumn} : null;
@@ -91,14 +93,14 @@ class Video extends File
                 $file = $request->file($this->attribute);
                 $cover = $request->file($this->attribute . '_larupload_cover');
 
-                $model->{$attachment}->attach($file, $cover ?? null);
+                $model->attachment($attachment)->attach($file, $cover ?? null);
 
                 return [];
             };
 
             if ($this->isPrunable()) {
                 $this->deleteCallback = function(Request $request, $model) use ($attachment) {
-                    $model->{$this->attachment}->detach();
+                    $model->attachment($this->attachment)->detach();
 
                     return [];
                 };

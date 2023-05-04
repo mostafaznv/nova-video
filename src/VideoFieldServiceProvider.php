@@ -8,7 +8,7 @@ use Illuminate\Support\ServiceProvider;
 
 class VideoFieldServiceProvider extends ServiceProvider
 {
-    public function boot()
+    public function boot(): void
     {
         Nova::serving(function(ServingNova $event) {
             Nova::script('nova-video', __DIR__ . '/../dist/js/field.js');
