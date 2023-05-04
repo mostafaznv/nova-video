@@ -3,7 +3,7 @@
 namespace Mostafaznv\NovaVideo;
 
 use Laravel\Nova\Fields\Text;
-use Mostafaznv\Larupload\Storage\Attachment;
+use Mostafaznv\Larupload\Storage\Proxy\AttachmentProxy;
 
 class VideoMeta
 {
@@ -24,12 +24,12 @@ class VideoMeta
     {
         $attachment = $this->attachment;
 
-        return Text::make(trans($label), "{$attachment}_file_{$name}")
+        return Text::make(trans($label), "{$attachment}_file_$name")
             ->readonly()
             ->exceptOnForms()
             ->displayUsing(function($value, $model) use ($attachment, $name) {
-                if ($attachment and is_a($model->{$attachment}, Attachment::class)) {
-                    $output = $model->{$attachment}->meta($name);
+                if ($attachment and is_a($model->{$attachment}, AttachmentProxy::class)) {
+                    $output = $model->attachment($attachment)->meta($name);
 
                     if ($name === 'duration') {
                         $output = $this->humanReadableDuration($output);
@@ -39,7 +39,7 @@ class VideoMeta
                     }
                 }
                 else {
-                    $output = '-';
+                    $output = '–';
                 }
 
                 return $output;
