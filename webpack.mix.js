@@ -1,4 +1,5 @@
 const mix = require('laravel-mix')
+const path = require('path')
 
 mix.setPublicPath('dist')
     .js('resources/js/field.js', 'js')
@@ -11,4 +12,10 @@ mix.setPublicPath('dist')
         resolve: {
             symlinks: false
         }
+    })
+    .alias({
+        'laravel-nova': path.join(
+            __dirname,
+            '../../../vendor/laravel/nova/resources/js/mixins/packages.js'
+        )
     })
