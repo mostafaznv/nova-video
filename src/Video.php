@@ -6,9 +6,12 @@ use Illuminate\Http\Request;
 use Laravel\Nova\Fields\File;
 use Illuminate\Support\Facades\Storage;
 use Exception;
+use Laravel\Nova\Fields\SupportsDependentFields;
 
 class Video extends File
 {
+    use SupportsDependentFields;
+
     public $component   = 'video';
     public $textAlign   = 'center';
     public $showOnIndex = true;
