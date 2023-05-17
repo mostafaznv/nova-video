@@ -1,11 +1,11 @@
 <template>
-    <default-field :field="field" :errors="errors" :full-width-content="true" :show-help-text="!isReadonly">
+    <default-field :field="currentField" :errors="errors" :full-width-content="true" :show-help-text="!currentlyIsReadonly">
         <template #field>
-            <div v-if="hasValue" :class="{ 'mb-6': !isReadonly }">
+            <div v-if="hasValue" :class="{ 'mb-6': !currentlyIsReadonly }">
                 <video controls v-if="videoUrl" :src="videoUrl" :autoplay="false" class="mt-3" :poster="imageUrl" />
 
-                <p v-if="videoUrl && !isReadonly" class="mt-3 flex items-center text-sm">
-                    <delete-button :dusk="field.attribute + '-delete-link'" v-if="shouldShowRemoveButton" @click="confirmRemoval">
+                <p v-if="videoUrl && !currentlyIsReadonly" class="mt-3 flex items-center text-sm">
+                    <delete-button :dusk="currentField.attribute + '-delete-link'" v-if="shouldShowRemoveButton" @click="confirmRemoval">
                         <span class="class ml-2 mt-1"> {{ __('Delete') }}</span>
                     </delete-button>
                 </p>
@@ -15,12 +15,12 @@
                 </portal>
             </div>
 
-            <p v-if="!hasValue && isReadonly" class="pt-2 text-sm text-90">{{ __('This file field is read-only.') }}</p>
+            <p v-if="!hasValue && currentlyIsReadonly" class="pt-2 text-sm text-90">{{ __('This file field is read-only.') }}</p>
 
-            <div v-if="shouldShowField" class="form-file mr-4" :class="{ 'opacity-75': isReadonly }">
+            <div v-if="shouldShowField" class="form-file mr-4" :class="{ 'opacity-75': currentlyIsReadonly }">
                 <div>
                     <div class="form-file inline-block mr-4">
-                        <input ref="fileField" :dusk="field.attribute" class="form-file-input select-none" type="file" :id="idAttr" name="name" @change="fileChange" :disabled="isReadonly || uploading" :accept="field.acceptedTypes" />
+                        <input ref="fileField" :dusk="currentField.attribute" class="form-file-input select-none" type="file" :id="idAttr" name="name" @change="fileChange" :disabled="currentlyIsReadonly || uploading" :accept="currentField.acceptedTypes" />
 
                         <label :for="labelFor" class="select-none">
                             <outline-button type="button" @click="focusOnFileInput">
@@ -36,7 +36,7 @@
 
                 <div v-if="laruploadIsOn && fileName" class="mt-3">
                     <div class="form-file inline-block mr-4">
-                        <input ref="thumbnailField" :dusk="field.attribute + '_image'" class="form-file-input select-none" type="file" :id="idAttr + '-thumbnail'" name="thumbnail" @change="thumbnailFileChange" :disabled="isReadonly || thumbnailUploading" accept="image/jpeg,image/png" />
+                        <input ref="thumbnailField" :dusk="currentField.attribute + '_image'" class="form-file-input select-none" type="file" :id="idAttr + '-thumbnail'" name="thumbnail" @change="thumbnailFileChange" :disabled="currentlyIsReadonly || thumbnailUploading" accept="image/jpeg,image/png" />
 
                         <label :for="labelFor + '-thumbnail'" class="select-none">
                             <outline-button type="button" @click="focusOnCoverInput">
@@ -57,12 +57,18 @@
 <script>
 import Vapor from 'laravel-vapor'
 import DeleteButton from './DeleteButton'
-import {FormField, HandlesValidationErrors, Errors} from 'laravel-nova'
+import {DependentFormField, HandlesValidationErrors, Errors} from 'laravel-nova'
 
 export default {
-    props: ['resourceId', 'relatedResourceName', 'relatedResourceId', 'viaRelationship'],
-    mixins: [HandlesValidationErrors, FormField],
-    components: {DeleteButton},
+    mixins: [
+        DependentFormField, HandlesValidationErrors
+    ],
+    props: [
+        'resourceId', 'relatedResourceName', 'relatedResourceId', 'viaRelationship', 'field'
+    ],
+    components: {
+        DeleteButton
+    },
     data: () => ({
         file: null,
         thumbnailFile: null,
@@ -126,7 +132,7 @@ export default {
          * The label attribute to use for the file field.
          */
         labelFor() {
-            return 'file-' + this.field.attribute + '-' + Math.random().toString(36).substr(2)
+            return 'file-' + this.currentField.attribute + '-' + Math.random().toString(36).substr(2)
         },
 
         /**
@@ -134,7 +140,7 @@ export default {
          */
         hasValue() {
             return (
-                Boolean(this.field.value || this.imageUrl) &&
+                Boolean(this.currentField.value || this.imageUrl) &&
                 !Boolean(this.deleted) &&
                 !Boolean(this.missing)
             )
@@ -151,46 +157,46 @@ export default {
          * Determine whether the file field input should be shown.
          */
         shouldShowField() {
-            return Boolean(!this.isReadonly)
+            return Boolean(!this.currentlyIsReadonly)
         },
 
         /**
          * Determine whether the field should show the remove button.
          */
         shouldShowRemoveButton() {
-            return Boolean(this.field.deletable && !this.isReadonly)
+            return Boolean(this.currentField.deletable && !this.currentlyIsReadonly)
         },
 
         /**
          * Return the preview or thumbnail URL for the field.
          */
         imageUrl() {
-            return this.field.thumbnailUrl
+            return this.currentField.thumbnailUrl
         },
 
         /**
          * Return the preview URL for the field.
          */
         videoUrl() {
-            return this.field.previewUrl
+            return this.currentField.previewUrl
         },
 
         /**
          * Determine the maximum width of the field.
          */
         maxWidth() {
-            return this.field.maxWidth || 320
+            return this.currentField.maxWidth || 320
         },
 
         /**
          * Determing if the field is a Vapor field.
          */
         isVaporField() {
-            return this.field.component == 'vapor-file-field'
+            return this.currentField.component === 'vapor-file-field'
         },
 
         laruploadIsOn() {
-            return this.field.laruploadIsOn
+            return this.currentField.laruploadIsOn
         }
     },
     methods: {
@@ -203,6 +209,8 @@ export default {
             this.fileName = fileName
             let extension = fileName.split('.').pop()
             this.file = this.$refs.fileField.files[0]
+
+            this.emitFieldValueChange(this.currentField.attribute, fileName || '')
 
             if (this.isVaporField) {
                 this.uploading = true
@@ -237,8 +245,8 @@ export default {
          */
         thumbnailFileChange(event) {
             let path = event.target.value
-            let fileName = path.match(/[^\\/]*$/)[0]
-            this.thumbnailFileName = fileName
+
+            this.thumbnailFileName = path.match(/[^\\/]*$/)[0]
             this.thumbnailFile = this.$refs.thumbnailField.files[0]
         },
 
@@ -262,14 +270,8 @@ export default {
         async removeFile() {
             this.uploadErrors = new Errors()
 
-            const {
-                resourceName,
-                resourceId,
-                relatedResourceName,
-                relatedResourceId,
-                viaRelationship,
-            } = this
-            const attribute = this.field.attribute
+            const {resourceName, resourceId, relatedResourceName, relatedResourceId, viaRelationship} = this
+            const attribute = this.currentField.attribute
 
             const uri = this.viaRelationship
                 ? `/nova-api/${resourceName}/${resourceId}/${relatedResourceName}/${relatedResourceId}/field/${attribute}?viaRelationship=${viaRelationship}`
@@ -292,21 +294,23 @@ export default {
         },
     },
     mounted() {
-        this.field.fill = formData => {
-            if (this.file && !this.isVaporField) {
-                formData.append(this.field.attribute, this.file, this.fileName)
-            }
+        this.currentField.fill = formData => {
+            if (this.currentlyIsVisible) {
+                if (this.file && !this.isVaporField) {
+                    formData.append(this.currentField.attribute, this.file, this.fileName)
+                }
 
-            if (this.file && this.isVaporField) {
-                formData.append(this.field.attribute, this.fileName)
-                formData.append('vaporFile[key]', this.vaporFile.key)
-                formData.append('vaporFile[uuid]', this.vaporFile.uuid)
-                formData.append('vaporFile[filename]', this.vaporFile.filename)
-                formData.append('vaporFile[extension]', this.vaporFile.extension)
-            }
+                if (this.file && this.isVaporField) {
+                    formData.append(this.currentField.attribute, this.fileName)
+                    formData.append('vaporFile[key]', this.vaporFile.key)
+                    formData.append('vaporFile[uuid]', this.vaporFile.uuid)
+                    formData.append('vaporFile[filename]', this.vaporFile.filename)
+                    formData.append('vaporFile[extension]', this.vaporFile.extension)
+                }
 
-            if (this.thumbnailFile) {
-                formData.append(this.field.attribute + '_larupload_cover', this.thumbnailFile);
+                if (this.thumbnailFile) {
+                    formData.append(this.currentField.attribute + '_larupload_cover', this.thumbnailFile);
+                }
             }
         }
     }
