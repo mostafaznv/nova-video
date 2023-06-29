@@ -82,7 +82,7 @@ class CreateMediaTable extends Migration
     'media' => [
         'driver'  => 'local',
         'root'    => public_path('uploads/media'),
-        'url'     => env('APP_URL') . 'uploads/media'
+        'url'     => env('APP_URL') . '/uploads/media'
     ]
 ],
 ```
