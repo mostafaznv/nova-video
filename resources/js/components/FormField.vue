@@ -1,6 +1,6 @@
 <template>
     <default-field :field="field" :errors="errors" :full-width-content="true" :show-help-text="!isReadonly">
-        <template slot="field">
+        <template #field>
             <div v-if="hasValue" :class="{ 'mb-6': !isReadonly }">
                 <video controls v-if="videoUrl" :src="videoUrl" :autoplay="false" class="mt-4" :poster="imageUrl" />
 
@@ -19,24 +19,32 @@
 
             <div v-if="shouldShowField" class="form-file mr-4" :class="{ 'opacity-75': isReadonly }">
                 <div>
-                    <input ref="fileField" :dusk="field.attribute" class="form-file-input select-none" type="file" :id="idAttr" name="name" @change="fileChange" :disabled="isReadonly || uploading" :accept="field.acceptedTypes" />
+                    <div class="form-file inline-block mr-4">
+                        <input ref="fileField" :dusk="field.attribute" class="form-file-input select-none" type="file" :id="idAttr" name="name" @change="fileChange" :disabled="isReadonly || uploading" :accept="field.acceptedTypes" />
 
-                    <label :for="labelFor" class="form-file-btn btn btn-default btn-primary select-none">
-                        <span v-if="uploading">{{ __('Uploading') }} ({{ uploadProgress }}%)</span>
-                        <span v-else>{{ __('Choose File') }}</span>
-                    </label>
+                        <label :for="labelFor" class="select-none">
+                            <outline-button type="button" @click="focusOnFileInput">
+                                <span v-if="uploading">{{ __('Uploading') }} ({{ uploadProgress }}%)</span>
+                                <span v-else>{{ __('Choose File') }}</span>
+                            </outline-button>
+                        </label>
+                    </div>
 
                     <span v-if="shouldShowField" class="text-90 text-sm select-none">{{ currentLabel }}</span>
                     <p v-if="hasError" class="text-xs mt-2 text-danger">{{ firstError }}</p>
                 </div>
 
-                <div v-if="laruploadIsOn && fileName" class="mt-4">
-                    <input ref="thumbnailField" :dusk="field.attribute + '_image'" class="form-file-input select-none" type="file" :id="idAttr + '-thumbnail'" name="thumbnail" @change="thumbnailFileChange" :disabled="isReadonly || thumbnailUploading" accept="image/jpeg,image/png" />
+                <div v-if="laruploadIsOn && fileName" class="mt-3">
+                    <div class="form-file inline-block mr-4">
+                        <input ref="thumbnailField" :dusk="field.attribute + '_image'" class="form-file-input select-none" type="file" :id="idAttr + '-thumbnail'" name="thumbnail" @change="thumbnailFileChange" :disabled="isReadonly || thumbnailUploading" accept="image/jpeg,image/png" />
 
-                    <label :for="labelFor + '-thumbnail'" class="form-file-btn btn btn-default btn-primary select-none">
-                        <span v-if="thumbnailUploading">{{ __('Uploading') }} ({{ thumbnailUploadProgress }}%)</span>
-                        <span v-else>{{ __('Choose Cover') }}</span>
-                    </label>
+                        <label :for="labelFor + '-thumbnail'" class="select-none">
+                            <outline-button type="button" @click="focusOnCoverInput">
+                                <span v-if="thumbnailUploading">{{ __('Uploading') }} ({{ thumbnailUploadProgress }}%)</span>
+                                <span v-else>{{ __('Choose Cover') }}</span>
+                            </outline-button>
+                        </label>
+                    </div>
 
                     <span v-if="shouldShowField" class="text-90 text-sm select-none">{{ currentThumbnailLabel }}</span>
                     <p v-if="hasError" class="text-xs mt-2 text-danger">{{ firstError }}</p>
@@ -217,6 +225,14 @@ export default {
         },
 
 
+        focusOnFileInput() {
+            this.$refs.fileField.click()
+        },
+
+        focusOnCoverInput() {
+            this.$refs.thumbnailField.click()
+        },
+
         /**
          * Respond to the thumbnail file change
          */
@@ -294,7 +310,7 @@ export default {
                 formData.append(this.field.attribute + '_larupload_cover', this.thumbnailFile);
             }
         }
-    },
+    }
 }
 </script>
 

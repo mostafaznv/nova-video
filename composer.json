@@ -6,8 +6,16 @@
     "require": {
         "php": "^7.4|^8.0",
         "mostafaznv/larupload": "^0.1.0",
+        "laravel/nova": "^4.26",
+        "nova-kit/nova-packages-tool": "^1.2",
         "ext-json": "*"
     },
+    "repositories": [
+        {
+            "type": "composer",
+            "url": "https://nova.laravel.com"
+        }
+    ],
     "autoload": {
         "psr-4": {
             "Mostafaznv\\NovaVideo\\": "src/"

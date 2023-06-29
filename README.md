@@ -32,6 +32,7 @@ You don't need any extra package to use `NovaVideo` field. But if you need more 
 
 - PHP 7.4 or higher
 - Laravel 8.* or higher
+- Laravel Nova 4.26.* or higher
 - FFMPEG (not required)
 
 

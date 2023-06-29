@@ -25,7 +25,9 @@ class Video extends File
 
         $this->preview(function($value, $disk, $model) {
             if ($this->attachment and $model->id) {
-                return $model->{$this->attachment}->url();
+                $this->value = $model->{$this->attachment}->url();
+
+                return $this->value;
             }
 
             return $value ? Storage::disk($this->getStorageDisk())->url($value) : null;

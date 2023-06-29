@@ -1,6 +1,6 @@
 <template>
     <panel-item :field="field">
-        <div slot="value">
+        <template #value>
             <template v-if="shouldShowVideo">
                 <video controls :src="src" :autoplay="autoplay" :poster="imageUrl" />
             </template>
@@ -16,7 +16,7 @@
                     <span class="class mt-1">{{ __('Download') }}</span>
                 </a>
             </p>
-        </div>
+        </template>
     </panel-item>
 </template>
 
@@ -54,7 +54,7 @@ export default {
             link.click()
             document.body.removeChild(link)
         }
-    },
+    }
 }
 </script>
 
