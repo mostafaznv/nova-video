@@ -192,10 +192,17 @@ class Media extends Resource
 }
 ```
 
+5 - Configure`Larupload`to use the same disk as `NovaVideo`.
+
+Go to `config/larupload.php` and set:
+```
+'disk' => 'media'
+```
+
+
 > When you have defined a Larupload attachment entity in your model, you should avoid using the same name for your Nova fields as the entity. As you can see in the code above, the second argument of the make function is `videos`, not `video`.
 
-> Larupload has its own disk, so the third argument of make function (disk) is not used when you are using larupload to handle upload process.  
-
+> Larupload has its own disk, so the third argument of make function (disk) is not used when you are using larupload to handle upload process.
 
 ## Get Video Metadata (Larupload)
 You can print extracted metadata from videos. this feature only works with larupload
