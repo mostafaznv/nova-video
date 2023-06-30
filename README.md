@@ -122,7 +122,7 @@ class Media extends Resource
 2- Add Larupload columns to your table
 
 ```
-use Mostafaznv\Larupload\LaruploadEnum;
+use Mostafaznv\Larupload\Enums\LaruploadMode;
 
 class CreateMediaTable extends Migration
 {
@@ -130,7 +130,7 @@ class CreateMediaTable extends Migration
     {
         Schema::create('media', function (Blueprint $table) {
             $table->id();
-            $table->upload('video', LaruploadEnum::LIGHT_MODE);
+            $table->upload('video', LaruploadMode::LIGHT_MODE);
             $table->timestamps();
         });
     }
