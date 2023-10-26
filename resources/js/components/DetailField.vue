@@ -1,9 +1,12 @@
 <template>
     <panel-item :index="index" :field="field">
         <template #value>
-            <template v-if="shouldShowVideo">
-                <video controls :src="src" :autoplay="autoplay" :poster="imageUrl" />
-            </template>
+            <video-player
+                v-if="shouldShowVideo"
+                :src="src"
+                :poster="imageUrl ?? ''"
+                :is-details="true"
+            />
 
             <span v-else>&mdash;</span>
 
@@ -18,7 +21,10 @@
 </template>
 
 <script>
+import VideoPlayer from "./VideoPlayer.vue";
+
 export default {
+    components: {VideoPlayer},
     props: ['resource', 'resourceName', 'resourceId', 'field', 'index'],
     data() {
         return {
@@ -54,13 +60,3 @@ export default {
     },
 }
 </script>
-
-<style lang="scss" scoped>
-video {
-    width: 500px;
-    max-width: 100%;
-    object-fit: cover;
-    outline: none;
-    border: none;
-}
-</style>

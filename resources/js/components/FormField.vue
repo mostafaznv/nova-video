@@ -2,7 +2,13 @@
     <default-field :field="currentField" :errors="errors" :full-width-content="true" :show-help-text="!currentlyIsReadonly">
         <template #field>
             <div v-if="hasValue" :class="{ 'mb-6': !currentlyIsReadonly }">
-                <video controls v-if="videoUrl" :src="videoUrl" :autoplay="false" class="mt-3" :poster="imageUrl" />
+                <video-player
+                    v-if="videoUrl"
+                    class="mt-3"
+                    :src="videoUrl"
+                    :poster="imageUrl ?? ''"
+                    :is-details="true"
+                />
 
                 <p v-if="videoUrl && !currentlyIsReadonly" class="mt-3 flex items-center text-sm">
                     <delete-button :dusk="currentField.attribute + '-delete-link'" v-if="shouldShowRemoveButton" @click="confirmRemoval">
@@ -58,6 +64,7 @@
 import Vapor from 'laravel-vapor'
 import DeleteButton from './DeleteButton'
 import {DependentFormField, HandlesValidationErrors, Errors} from 'laravel-nova'
+import VideoPlayer from './VideoPlayer.vue'
 
 export default {
     mixins: [
@@ -67,6 +74,7 @@ export default {
         'resourceId', 'relatedResourceName', 'relatedResourceId', 'viaRelationship', 'field'
     ],
     components: {
+        VideoPlayer,
         DeleteButton
     },
     data: () => ({
@@ -178,7 +186,7 @@ export default {
          * Return the preview URL for the field.
          */
         videoUrl() {
-            return this.currentField.previewUrl
+            return this.currentField.previewUrl ?? ''
         },
 
         /**
