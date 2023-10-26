@@ -7,6 +7,8 @@
                     class="mt-3"
                     :src="videoUrl"
                     :poster="imageUrl ?? ''"
+                    :type="field.playerType"
+                    :dir="field.dir"
                     :is-details="true"
                 />
 

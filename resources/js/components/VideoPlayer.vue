@@ -1,7 +1,7 @@
 <template>
-    <div class="video" :dir="dir" :class="[mode, {small: !isDetails}]">
+    <div class="video" :dir="dir" :class="[type, {small: !isDetails}]">
         <media-player
-            v-if="mode === 'custom'"
+            v-if="type === 'vidstack'"
             @click.stop.prevent
             class="media-player"
             :title="title"
@@ -47,11 +47,11 @@ const props = defineProps({
             return ['ltr', 'rtl', 'auto'].includes(value)
         }
     },
-    mode: {
+    type: {
         type: String,
-        default: 'custom',
+        default: 'vidstack',
         validator(value) {
-            return ['custom', 'default'].includes(value)
+            return ['vidstack', 'default'].includes(value)
         }
     },
     isDetails: {

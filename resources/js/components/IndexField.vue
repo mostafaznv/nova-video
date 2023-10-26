@@ -4,6 +4,8 @@
             v-if="field.previewUrl"
             :src="src"
             :poster="poster"
+            :type="field.playerType"
+            :dir="field.dir"
             :is-details="false"
         />
 

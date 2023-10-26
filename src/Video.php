@@ -17,10 +17,17 @@ class Video extends File
     public $showOnIndex = true;
 
     protected string $attachment = '';
+    protected string $dir        = 'ltr';
+    protected string $playerType = 'vidstack';
 
     public function __construct($label, $fieldName = null, $disk = 'public', $storageCallback = null)
     {
         parent::__construct($label, $fieldName, $disk, $storageCallback);
+
+
+        $this->dir = config('nova-video.ui.player.dir');
+        $this->playerType = config('nova-video.ui.player.type');
+
 
         $this->displayUsing(function($value, $model, $attribute) {
             return $this->attachment ? $model->attachment($this->attachment)->urls() : $value;
@@ -112,10 +119,27 @@ class Video extends File
         return $this;
     }
 
+    public function dir(string $dir): self
+    {
+        $this->dir = $dir;
+
+        return $this;
+    }
+
+    public function playerType(string $type): self
+    {
+        $this->playerType = $type;
+
+        return $this;
+    }
+
+
     public function jsonSerialize(): array
     {
         return array_merge(parent::jsonSerialize(), [
-            'laruploadIsOn' => !!$this->attachment
+            'laruploadIsOn' => !!$this->attachment,
+            'dir'           => $this->dir,
+            'playerType'    => $this->playerType,
         ]);
     }
 }

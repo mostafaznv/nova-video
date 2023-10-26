@@ -5,6 +5,8 @@
                 v-if="shouldShowVideo"
                 :src="src"
                 :poster="imageUrl ?? ''"
+                :type="field.playerType"
+                :dir="field.dir"
                 :is-details="true"
             />
 

@@ -56,6 +56,11 @@ Install using composer:
 composer require mostafaznv/nova-video
 ```
 
+## Publish Config File
+```shell
+php artisan vendor:publish --provider="Mostafaznv\NovaVideo\VideoFieldServiceProvider"
+```
+
 
 ## Usage
 
@@ -241,11 +246,28 @@ Check Larupload [documentation](https://mostafaznv.gitbook.io/larupload/)
 ## Nova Field Notable Methods
 | Name               | Arguments                                  | description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
 |--------------------|--------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| storeWithLarupload | string (required) (attachment entity name) | Handle the whole upload process with `Larupload`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
 | prunable           | boolean                                    | The prunable method will instruct Nova to delete the underlying file from storage when the associated model is deleted from the database.<br><br> **Note**: If you are using larupload, you have to keep in mind that larupload will delete files automatically after each delete. to control it, take a look at the larupload documentation and read about `preserve file property`                                                                                                                                                                                                                                                                                                                                             |
 | make               | label (field's label), field name, disk    | **Label**: Defines a label for file field <br><br> **Field Name**: Defines the name of input element `<input type='file' />` <br> — **Without Larupload**: you must provide the name of the file column as the Field Name parameter. <br> — **With Larupload**: when you have defined a larupload attachment entity in your model, you can't use the name of that entity for this argument. use whatever you want, but not the entity's name  <br><br> **Disk**: name of your preferred disk in config/filesystems.php file. <br> Note: Larupload has its own disk, so this argument is not used when you are using larupload to handle upload process. check larupload [documentation](https://github.com/mostafaznv/larupload) |
 
+
+
+## Nova Field Methods
+| Name               | Arguments                                                     | description                                                                                                                                                                          |
+|--------------------|---------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| storeWithLarupload | string (required) (attachment entity name)                    | Handle the whole upload process with `Larupload`                                                                                                                                     |
+| playerType         | string (accepts: `vidstack`, `default`) (default: `vidstack`) | Starting from v1.2.0, the Video field can display videos using the `vidstack` video player. You have the option to choose the player between the default HTML player and `vidstack`. |
+| dir                | string (accepts: `ltr`, `rtl`) (default: `ltr`)               | This option only works when you are displaying videos using `vidstack`, and it's responsible for determining the layout of player, whether it should be `RTL` or `LTR`.              |
+
+
+## Config Properties
+| Property       | Type                                    | description                                                                                                                                                                          |
+|----------------|-----------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| ui.player.type | string (accepts: `vidstack`, `default`) | Starting from v1.2.0, the Video field can display videos using the `vidstack` video player. You have the option to choose the player between the default HTML player and `vidstack`. |
+| ui.player.dir  | string (accepts: `ltr`, `rtl`)          | This property only works when you are displaying videos using `vidstack`, and it's responsible for determining the layout of player, whether it should be `RTL` or `LTR`.            |
+
+
 ----
+
 I am on an open-source journey 🚀, and I wish I could solely focus on my development path without worrying about my financial situation. However, as life is not perfect, I have to consider other factors.
 
 Therefore, if you decide to use my packages, please kindly consider making a donation. Any amount, no matter how small, goes a long way and is greatly appreciated. 🍺
