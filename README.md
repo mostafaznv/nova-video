@@ -255,14 +255,14 @@ Check Larupload [documentation](https://mostafaznv.gitbook.io/larupload/)
 | Name               | Arguments                                                     | description                                                                                                                                                                          |
 |--------------------|---------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | storeWithLarupload | string (required) (attachment entity name)                    | Handle the whole upload process with `Larupload`                                                                                                                                     |
-| playerType         | string (accepts: `vidstack`, `default`) (default: `vidstack`) | Starting from v1.2.0, the Video field can display videos using the `vidstack` video player. You have the option to choose the player between the default HTML player and `vidstack`. |
+| playerType         | string (accepts: `vidstack`, `default`) (default: `vidstack`) | Starting from v5.2.0, the Video field can display videos using the `vidstack` video player. You have the option to choose the player between the default HTML player and `vidstack`. |
 | dir                | string (accepts: `ltr`, `rtl`) (default: `ltr`)               | This option only works when you are displaying videos using `vidstack`, and it's responsible for determining the layout of player, whether it should be `RTL` or `LTR`.              |
 
 
 ## Config Properties
 | Property       | Type                                    | description                                                                                                                                                                          |
 |----------------|-----------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| ui.player.type | string (accepts: `vidstack`, `default`) | Starting from v1.2.0, the Video field can display videos using the `vidstack` video player. You have the option to choose the player between the default HTML player and `vidstack`. |
+| ui.player.type | string (accepts: `vidstack`, `default`) | Starting from v5.2.0, the Video field can display videos using the `vidstack` video player. You have the option to choose the player between the default HTML player and `vidstack`. |
 | ui.player.dir  | string (accepts: `ltr`, `rtl`)          | This property only works when you are displaying videos using `vidstack`, and it's responsible for determining the layout of player, whether it should be `RTL` or `LTR`.            |
 
 
