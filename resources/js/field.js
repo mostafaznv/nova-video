@@ -1,6 +1,6 @@
-import IndexField from './components/IndexField'
-import DetailField from './components/DetailField'
-import FormField from './components/FormField'
+import IndexField from './fields/IndexField'
+import DetailField from './fields/DetailField'
+import FormField from './fields/FormField'
 
 Nova.booting((Vue) => {
     Vue.component('index-video', IndexField);

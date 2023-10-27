@@ -3582,13 +3582,6 @@ laravel-mix@^6.0.49:
     webpackbar "^5.0.0-3"
     yargs "^17.2.1"
 
-laravel-vapor@^0.6.0:
-  version "0.6.0"
-  resolved "https://registry.npmjs.org/laravel-vapor/-/laravel-vapor-0.6.0.tgz"
-  integrity sha512-bfEnyaIAmUInIYAE/XBwuP9hiZMkXmL+X7Qx7Fr7e/I91fwftNr3xvsMXz2CjDVmxXoY0mBaSbZAJvKSTBZGSg==
-  dependencies:
-    axios "^0.21.1"
-
 launch-editor@^2.6.0:
   version "2.6.1"
   resolved "https://registry.npmjs.org/launch-editor/-/launch-editor-2.6.1.tgz"
@@ -5408,7 +5401,7 @@ vue-template-compiler@^2.6.14:
     de-indent "^1.0.2"
     he "^1.2.0"
 
-vue@^3.2.0, vue@^3.2.37, vue@3.3.7:
+vue@^3.2.0, vue@^3.3.4, vue@3.3.7:
   version "3.3.7"
   resolved "https://registry.npmjs.org/vue/-/vue-3.3.7.tgz"
   integrity sha512-YEMDia1ZTv1TeBbnu6VybatmSteGOS3A3YgfINOfraCbf85wdKHzscD6HSS/vB4GAtI7sa1XPX7HcQaJ1l24zA==

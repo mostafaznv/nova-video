@@ -23,10 +23,13 @@
 </template>
 
 <script>
-import VideoPlayer from "./VideoPlayer.vue";
+import VideoPlayer from '../components/VideoPlayer.vue'
+
 
 export default {
-    components: {VideoPlayer},
+    components: {
+        VideoPlayer
+    },
     props: ['resource', 'resourceName', 'resourceId', 'field', 'index'],
     data() {
         return {
