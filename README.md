@@ -1,282 +1,39 @@
 # Video Field for Laravel Nova
 
+[![GitHub license](https://img.shields.io/github/license/mostafaznv/nova-video?style=flat-square)](https://github.com/mostafaznv/nova-video/blob/master/LICENSE)
 [![Total Downloads](https://img.shields.io/packagist/dt/mostafaznv/nova-video.svg?style=flat-square)](https://packagist.org/packages/mostafaznv/nova-video)
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/mostafaznv/nova-video.svg?style=flat-square)](https://packagist.org/packages/mostafaznv/nova-video)
 
-Upload and display videos in laravel nova
 
-This package is an *extended* version of built-in nova *file field* that helps you to upload local video files and display them in nova panel.
+Uploading and Displaying Videos in Laravel Nova
 
-You don't need any extra package to use `NovaVideo` field. But if you need more features, we suggest you to use `Larupload` next to the `NovaVideo`.
+This package is an extended version of the built-in Nova file field, designed to simplify the process of uploading local video files and displaying them within the Nova panel.
 
-`NovaVideo` comes with built-in support for [Larupload](https://github.com/mostafaznv/larupload/) package
+You don't require any additional packages to utilize the `NovaVideo` field. However, if you desire more advanced features, we recommend complementing it with `Larupload`.
 
-
-## Base features:
-
-- Upload videos
-- Display videos using html5 video tag
-- Delete videos
-- Replace videos
-- Download videos
-- Localization
-- Configurable
-
-
-## Additional features with Larupload:
-
-- Attach a poster to video files
-- Extract video metadata such as duration, width, height, and dominant color
-- Ability to resize/crop photos and videos
-- Ability to create HTTP Live Streaming (HLS) from video sources
-
-
-----
-I am on an open-source journey 🚀, and I wish I could solely focus on my development path without worrying about my financial situation. However, as life is not perfect, I have to consider other factors.
-
-Therefore, if you decide to use my packages, please kindly consider making a donation. Any amount, no matter how small, goes a long way and is greatly appreciated. 🍺
 
 [![Donate](https://mostafaznv.github.io/donate/donate.svg)](https://mostafaznv.github.io/donate)
 
-----
+<br/>
 
-## Requirements:
+### Base features:
 
-- PHP 8.1 or higher
-- Laravel 10.4.1 or higher
-- FFMPEG (optional)
+* Upload videos
+* Display videos using the HTML5/Vidstack video player
+* Delete videos
+* Replace(Update) videos
+* Download videos
+* Localization
+* Configurable
 
-> FFMPEG is required if you wish to use additional features with Larupload.
+### Additional features with Larupload:
 
-## Installation
+* Attach a poster to video files
+* Extract video metadata such as `duration`, `width`, `height`, and `dominant color`
+* Ability to resize/crop photos and videos
+* Ability to create HTTP Live Streaming (HLS) from video sources
 
-Install using composer:
+<br/>
 
-```
-composer require mostafaznv/nova-video
-```
-
-## Publish Config File
-```shell
-php artisan vendor:publish --provider="Mostafaznv\NovaVideo\VideoFieldServiceProvider"
-```
-
-
-## Usage
-
-1- Add a string column to your table
-
-```
-class CreateMediaTable extends Migration
-{
-    public function up()
-    {
-        Schema::create('media', function (Blueprint $table) {
-            $table->id();
-            $table->string('video')->nullable();
-            $table->timestamps();
-        });
-    }
-}
-```
-
-2- Add a disk to `config/filesystems.php`
-
-```
-'disks' => [
-    'media' => [
-        'driver'  => 'local',
-        'root'    => public_path('uploads/media'),
-        'url'     => env('APP_URL') . 'uploads/media'
-    ]
-],
-```
-
-3- Add `NovaVideo` field to your Resource
-
-```
-use Mostafaznv\NovaVideo\Video;
-
-class Media extends Resource
-{
-    public static string $model = MediaModel::class;
-
-    public function fields(Request $request): array
-    {
-        return [
-            ID::make()->sortable(),
-
-            Video::make(trans('Video'), 'video', 'media')
-                ->rules('file', 'max:150000', 'mimes:mp4', 'mimetypes:video/mp4')
-                ->creationRules('required')
-                ->updateRules('nullable'),
-        ];
-    }
-}
-```
-
-> The second argument of `make` function is your file column's name.  
-
-> The third argument of `make` function is your preferred disk name.
-
-
-## Usage with Larupload
-
-1- Install `Larupload` using [this](https://mostafaznv.gitbook.io/larupload/getting-started/installation) documentation
-
-2- Add Larupload columns to your table
-
-```
-use Mostafaznv\Larupload\LaruploadEnum;
-
-class CreateMediaTable extends Migration
-{
-    public function up()
-    {
-        Schema::create('media', function (Blueprint $table) {
-            $table->id();
-            $table->upload('video', LaruploadEnum::LIGHT_MODE);
-            $table->timestamps();
-        });
-    }
-}
-```
-
-3- Add larupload trait to your model
-
-```
-use Mostafaznv\Larupload\Enums\LaruploadMediaStyle;
-use Mostafaznv\Larupload\Enums\LaruploadMode;
-use Mostafaznv\Larupload\Enums\LaruploadNamingMethod;
-use Mostafaznv\Larupload\Storage\Attachment;
-use Mostafaznv\Larupload\Traits\Larupload;
-
-class Media extends Model
-{
-    use Larupload;
-
-
-    /**
-     * Define Upload Entities
-     *
-     * @return array
-     * @throws Exception
-     */
-    public function attachments(): array
-    {
-        return [
-            Attachment::make('video', LaruploadMode::LIGHT)
-                ->namingMethod(LaruploadNamingMethod::HASH_FILE)
-                ->coverStyle('cover', 852, 480, LaruploadMediaStyle::AUTO)
-        ];
-    }
-}
-```
-
-4- Add `NovaVideo` field to your `Resource`
-
-```
-use Mostafaznv\NovaVideo\Video;
-
-class Media extends Resource
-{
-    public static string $model = MediaModel::class;
-
-    public function fields(Request $request): array
-    {
-        return [
-            ID::make()->sortable(),
-
-            Video::make(trans('Video'), 'video')
-                ->storeWithLarupload()
-                ->rules('file', 'max:150000', 'mimes:mp4', 'mimetypes:video/mp4')
-                ->creationRules('required')
-                ->updateRules('nullable'),
-        ];
-    }
-}
-```
-
-> Larupload has its own disk, so the third argument of make function (disk) is not used when you are using larupload to handle upload process.  
-
-
-## Get Video Metadata (Larupload)
-You can print extracted metadata from videos. this feature only works with larupload
-
-```
-<?php
-use Mostafaznv\NovaVideo\Video;
-use Mostafaznv\NovaVideo\VideoMeta;
-
-class Media extends Resource
-{
-    public static string $model = MediaModel::class;
-
-    public function fields(Request $request): array
-    {
-        return [
-            ID::make()->sortable(),
-            Video::make(trans('Video'), 'video')->storeWithLarupload(),
-
-            // print all metadata with this function
-            
-            ...VideoMeta::make('video')->all(),
-
-            // or print them by their function
-            
-            /*VideoMeta::make('video')->fileName(),
-            VideoMeta::make('video')->size(),
-            VideoMeta::make('video')->mimeType(),
-            VideoMeta::make('video')->width(),
-            VideoMeta::make('video')->height(),
-            VideoMeta::make('video')->duration(),
-            VideoMeta::make('video')->format(),*/
-
-        ];
-    }
-}
-```
-
-## Rest API Usage (Larupload)
-Check Larupload [documentation](https://mostafaznv.gitbook.io/larupload/)   
-
-
-
-## Nova Field Methods
-| Name               | Arguments                                                     | description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
-|--------------------|---------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| make               | label (field's label), field name, disk                       | **Label**: Defines a label for file field <br><br> **Field Name**: Defines the name of input element `<input type='file' />` <br> — **Without Larupload**: you must provide the name of the file column as the Field Name parameter. <br> — **With Larupload**: name of larupload attachment entity. <br><br> **Disk**: name of your preferred disk in config/filesystems.php file. <br> Note: Larupload has its own disk, so this argument is not used when you are using larupload to handle upload process. check larupload [documentation](https://github.com/mostafaznv/larupload) |
-| storeWithLarupload | string (required) (attachment entity name)                    | Handle the whole upload process with `Larupload`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
-| playerType         | string (accepts: `vidstack`, `default`) (default: `vidstack`) | Starting from v6.0, the Video field can display videos using the `vidstack` video player. You have the option to choose the player between the default HTML player and `vidstack`.                                                                                                                                                                                                                                                                                                                                                                                                      |
-| dir                | string (accepts: `ltr`, `rtl`) (default: `ltr`)               | This option only works when you are displaying videos using `vidstack`, and it's responsible for determining the layout of player, whether it should be `RTL` or `LTR`.                                                                                                                                                                                                                                                                                                                                                                                                                 |
-| hideCoverUploader  | boolean (default: true)                                       | This method is used to display/hide cover uploader in create/update form.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
-
-
-## Config Properties
-| Property       | Type                                    | description                                                                                                                                                                        |
-|----------------|-----------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| ui.player.type | string (accepts: `vidstack`, `default`) | Starting from v6.0, the Video field can display videos using the `vidstack` video player. You have the option to choose the player between the default HTML player and `vidstack`. |
-| ui.player.dir  | string (accepts: `ltr`, `rtl`)          | This property only works when you are displaying videos using `vidstack`, and it's responsible for determining the layout of player, whether it should be `RTL` or `LTR`.          |
-| cover-uploader | boolean                                 | This property is used to display cover uploader in create/update form.                                                                                                             |
-
-
-## Notes
-
-### Pruning Files
-If you are using `Larupload`, Nova's `prunable` method does not work with `NovaVideo` field as expected. As you may know, in `Larupload`, there is an option to turn on/off `preserve-files`. This option is used to prevent files from being deleted when the model is deleted from the database, and it aligns with the behavior expected from the `prunable` method. Therefore, if you want to keep files when the model is deleted, you should set `preserve-files` to `true`. You can do this either in your Larupload [configuration](https://mostafaznv.gitbook.io/larupload/advanced-usage/configuration/preserve-files) file or in your file [attachment instance](https://mostafaznv.gitbook.io/larupload/advanced-usage/attachment/preserve-files).
-
-
-----
-
-I am on an open-source journey 🚀, and I wish I could solely focus on my development path without worrying about my financial situation. However, as life is not perfect, I have to consider other factors.
-
-Therefore, if you decide to use my packages, please kindly consider making a donation. Any amount, no matter how small, goes a long way and is greatly appreciated. 🍺
-
-[![Donate](https://mostafaznv.github.io/donate/donate.svg)](https://mostafaznv.github.io/donate)
-
-----
-
-## License
-This software released under [Apache License Version 2.0](LICENSE.txt).
-
-(C) 2023 Mostafaznv, All rights reserved.
+### Documentation
+You can find installation instructions and detailed instructions on how to use this package at the [dedicated documentation site](https://mostafaznv.gitbook.io/nova-video/).
