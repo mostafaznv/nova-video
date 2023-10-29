@@ -18,8 +18,6 @@ class CreateMediaTable extends Migration
 }
 ```
 
-
-
 2. **Add a Disk to config/filesystems.php**
 
 In your `config/filesystems.php` file, add a disk configuration for <mark style="color:red;">media</mark> as follows:
@@ -35,8 +33,6 @@ In your `config/filesystems.php` file, add a disk configuration for <mark style=
 ],
 ```
 {% endcode %}
-
-
 
 3. **Add NovaVideo Field to Your Resource**
 
@@ -72,14 +68,9 @@ class Media extends Resource
 }
 ```
 
-
-
 {% hint style="info" %}
-The second argument of the <mark style="color:red;">make</mark> function is your file column's name.
-{% endhint %}
-
-{% hint style="info" %}
-The third argument of the <mark style="color:red;">make</mark> function is your preferred disk name.
+* The second argument of the <mark style="color:red;">make</mark> function is your file column's name.
+* The third argument of the <mark style="color:red;">make</mark> function is your preferred disk name.
 {% endhint %}
 
 
