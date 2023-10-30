@@ -38,6 +38,8 @@ You don't require any additional packages to utilize the `NovaVideo` field. Howe
 ### Documentation
 You can find installation instructions and detailed instructions on how to use this package at the [dedicated documentation site](https://mostafaznv.gitbook.io/nova-video/).
 
+<br/>
+
 ------
 
 ### Demo
