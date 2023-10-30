@@ -29,3 +29,7 @@
       * [Type](advanced-usage/configuration/ui/player/type.md)
       * [Direction (dir)](advanced-usage/configuration/ui/player/direction-dir.md)
   * [Cover Uploader](advanced-usage/configuration/cover-uploader.md)
+
+## ⚪ Other
+
+* [Demo](other/demo.md)
