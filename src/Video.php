@@ -2,70 +2,92 @@
 
 namespace Mostafaznv\NovaVideo;
 
-use Illuminate\Http\Request;
 use Laravel\Nova\Fields\File;
 use Illuminate\Support\Facades\Storage;
-use Exception;
 use Laravel\Nova\Fields\SupportsDependentFields;
+use Laravel\Nova\Http\Requests\NovaRequest;
+use Mostafaznv\NovaVideo\Traits\HandlesValidation;
+
 
 class Video extends File
 {
-    use SupportsDependentFields;
+    use SupportsDependentFields, HandlesValidation;
 
     public $component   = 'video';
     public $textAlign   = 'center';
     public $showOnIndex = true;
 
-    protected string $attachment = '';
+    protected bool   $storeWithLarupload   = false;
+    protected string $dir                  = 'ltr';
+    protected string $playerType           = 'vidstack';
+    protected bool   $displayCoverUploader = true;
+
 
     public function __construct($label, $fieldName = null, $disk = 'public', $storageCallback = null)
     {
         parent::__construct($label, $fieldName, $disk, $storageCallback);
 
+
+        $this->dir = config('nova-video.ui.player.dir');
+        $this->playerType = config('nova-video.ui.player.type');
+        $this->displayCoverUploader = config('nova-video.cover-uploader');
+
+
         $this->displayUsing(function($value, $model, $attribute) {
-            return $this->attachment ? $model->attachment($this->attachment)->urls() : $value;
+            return $this->storeWithLarupload
+                ? $model->attachment($this->attribute)->urls()
+                : $value;
         });
 
         $this->preview(function($value, $disk, $model) {
-            if ($this->attachment and $model->id) {
-                $this->value = $model->attachment($this->attachment)->url();
+            if ($this->storeWithLarupload) {
+                if ($model->id) {
+                    $this->value = $model->attachment($this->attribute)->url();
 
-                return $this->value;
+                    return $this->value;
+                }
+
+                $this->value = null;
+
+                return null;
             }
 
             return $value ? Storage::disk($this->getStorageDisk())->url($value) : null;
         });
 
         $this->thumbnail(function($value, $disk, $model) {
-            if ($this->attachment and $model->id) {
-                return $model->attachment($this->attachment)->url('cover');
+            if ($this->storeWithLarupload) {
+                return $model->id
+                    ? $model->attachment($this->attribute)->url('cover')
+                    : null;
             }
 
-            if (is_a($value, 'Mostafaznv\Larupload\Storage\Attachment') and $value->getName() === $this->attribute) {
-                throw new Exception('Video attribute and Larupload attachment entity cannot be the same');
-            }
-
-            return $value ? Storage::disk($disk)->url($value) : null;
+            return null;
         });
 
-        $this->delete(function(Request $request, $model) {
-            if ($this->attachment) {
-                $model->attachment($this->attachment)->detach();
+        $this->delete(function(NovaRequest $request, $model) {
+            if ($this->isPrunable()) {
+                if ($this->storeWithLarupload) {
+                    if ($request->query('cover') === 'true') {
+                        $model->attachment($this->attribute)->cover()->detach();
+                    }
+                    else {
+                        $model->attachment($this->attribute)->detach();
+                    }
+                }
+                else if ($this->value) {
+                    Storage::disk($this->getStorageDisk())->delete($this->value);
 
-                return [];
-            }
-            else if ($this->value) {
-                Storage::disk($this->getStorageDisk())->delete($this->value);
-
-                return $this->columnsThatShouldBeDeleted();
+                    return $this->columnsThatShouldBeDeleted();
+                }
             }
 
             return [];
         });
 
         $this->download(function($request, $model) {
-            if ($this->attachment) {
-                return $model->attachment($this->attachment)->download();
+            if ($this->storeWithLarupload) {
+                return $model->attachment($this->attribute)->download();
             }
 
             $name = $this->originalNameColumn ? $model->{$this->originalNameColumn} : null;
@@ -76,38 +98,73 @@ class Video extends File
         $this->prunable();
     }
 
-    /**
-     * Specify if we want whole uploading process to be handled with larupload.
-     *
-     * @param string $attachment
-     * @return $this
-     */
-    public function storeWithLarupload(string $attachment = ''): Video
+    protected function fillAttribute(NovaRequest $request, $requestAttribute, $model, $attribute)
     {
-        if ($attachment) {
-            if ($attachment == $this->attribute) {
-                throw new Exception('Video attribute and Larupload attachment entity cannot be the same');
+        if ($this->storeWithLarupload) {
+            $this->validate($request, $attribute);
+
+            $originalAttribute = "$attribute.original";
+            $coverAttribute = "$attribute.cover";
+
+            if ($request->file($originalAttribute)) {
+                $attribute = $originalAttribute;
+                $requestAttribute = $originalAttribute;
             }
+            else if ($request->file($coverAttribute)) {
+                $attribute = $coverAttribute;
+                $requestAttribute = $coverAttribute;
+            }
+        }
 
-            $this->attachment = $attachment;
 
-            $this->storageCallback = function(Request $request, $model) use ($attachment) {
-                $file = $request->file($this->attribute);
-                $cover = $request->file($this->attribute . '_larupload_cover');
+        return parent::fillAttribute($request, $requestAttribute, $model, $attribute);
+    }
 
-                $model->attachment($attachment)->attach($file, $cover ?? null);
+    public function storeWithLarupload(bool $status = true): Video
+    {
+        $this->storeWithLarupload = $status;
+
+        if ($this->storeWithLarupload) {
+            $this->storageCallback = function(NovaRequest $request, $model) {
+                $attachment = $this->attribute;
+                $file = $request->file("$attachment.original");
+                $cover = $request->file("$attachment.cover");
+
+                if ($file) {
+                    $model->attachment($attachment)->attach($file, $cover);
+                }
+                else if ($request->isUpdateOrUpdateAttachedRequest() and $cover) {
+                    if (!$model->attachment($attachment)->url()) {
+                        abort(400);
+                    }
+
+                    $model->attachment($attachment)->cover()->update($cover);
+                }
 
                 return [];
             };
-
-            if ($this->isPrunable()) {
-                $this->deleteCallback = function(Request $request, $model) use ($attachment) {
-                    $model->attachment($this->attachment)->detach();
-
-                    return [];
-                };
-            }
         }
+
+        return $this;
+    }
+
+    public function dir(string $dir): self
+    {
+        $this->dir = $dir;
+
+        return $this;
+    }
+
+    public function playerType(string $type): self
+    {
+        $this->playerType = $type;
+
+        return $this;
+    }
+
+    public function hideCoverUploader(bool $status = true): self
+    {
+        $this->displayCoverUploader = !$status;
 
         return $this;
     }
@@ -115,7 +172,10 @@ class Video extends File
     public function jsonSerialize(): array
     {
         return array_merge(parent::jsonSerialize(), [
-            'laruploadIsOn' => !!$this->attachment
+            'laruploadIsOn'        => $this->storeWithLarupload,
+            'dir'                  => $this->dir,
+            'playerType'           => $this->playerType,
+            'displayCoverUploader' => $this->displayCoverUploader
         ]);
     }
 }
