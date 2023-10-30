@@ -22,6 +22,10 @@
 
 <figure><img src="../.gitbook/assets/5.png" alt=""><figcaption><p>Detail</p></figcaption></figure>
 
+ 
+
+<figure><img src="../.gitbook/assets/6.png" alt=""><figcaption><p>Delete a Video</p></figcaption></figure>
+
 </div>
 
 
