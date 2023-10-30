@@ -62,7 +62,7 @@ class Video extends File
                     : null;
             }
 
-            return $value ? Storage::disk($disk)->url($value) : null;
+            return null;
         });
 
         $this->delete(function(NovaRequest $request, $model) {
