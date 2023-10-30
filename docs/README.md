@@ -16,7 +16,7 @@ You don't require any additional packages to utilize the `NovaVideo` field. Howe
 
 
 
-### Base features:
+### Base features
 
 * Upload videos
 * Display videos using the HTML5/Vidstack video player
@@ -26,7 +26,7 @@ You don't require any additional packages to utilize the `NovaVideo` field. Howe
 * Localization
 * Configurable
 
-### Additional features with Larupload:
+### Additional features with Larupload
 
 * Attach a poster to video files
 * Extract video metadata such as `duration`, `width`, `height`, and `dominant color`

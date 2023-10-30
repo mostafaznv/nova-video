@@ -15,7 +15,7 @@
 
 ## ⚙ Advanced Usage
 
-* [Retrieve Video Metadata (Larupload)](advanced-usage/retrieve-video-metadata-larupload.md)
+* [Video Metadata](advanced-usage/video-metadata.md)
 * [Rest API Usage (Larupload)](advanced-usage/rest-api-usage-larupload.md)
 * [Video Field Options](advanced-usage/video-field-options/README.md)
   * [Make](advanced-usage/video-field-options/make.md)
