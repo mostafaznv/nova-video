@@ -6,6 +6,8 @@ use Laravel\Nova\Fields\File;
 use Illuminate\Support\Facades\Storage;
 use Laravel\Nova\Fields\SupportsDependentFields;
 use Laravel\Nova\Http\Requests\NovaRequest;
+use Mostafaznv\NovaVideo\Enums\NovaVideoPlayerDirection;
+use Mostafaznv\NovaVideo\Enums\NovaVideoPlayerType;
 use Mostafaznv\NovaVideo\Traits\HandlesValidation;
 
 
@@ -17,10 +19,11 @@ class Video extends File
     public $textAlign   = 'center';
     public $showOnIndex = true;
 
-    protected bool   $storeWithLarupload   = false;
-    protected string $dir                  = 'ltr';
-    protected string $playerType           = 'vidstack';
-    protected bool   $displayCoverUploader = true;
+    protected bool $storeWithLarupload   = false;
+    protected bool $displayCoverUploader = true;
+
+    protected NovaVideoPlayerDirection $dir        = NovaVideoPlayerDirection::LTR;
+    protected NovaVideoPlayerType      $playerType = NovaVideoPlayerType::VIDSTACK;
 
 
     public function __construct($label, $fieldName = null, $disk = 'public', $storageCallback = null)
@@ -148,14 +151,14 @@ class Video extends File
         return $this;
     }
 
-    public function dir(string $dir): self
+    public function dir(NovaVideoPlayerDirection $dir): self
     {
         $this->dir = $dir;
 
         return $this;
     }
 
-    public function playerType(string $type): self
+    public function playerType(NovaVideoPlayerType $type): self
     {
         $this->playerType = $type;
 
@@ -173,8 +176,8 @@ class Video extends File
     {
         return array_merge(parent::jsonSerialize(), [
             'laruploadIsOn'        => $this->storeWithLarupload,
-            'dir'                  => $this->dir,
-            'playerType'           => $this->playerType,
+            'dir'                  => $this->dir->name,
+            'playerType'           => $this->playerType->name,
             'displayCoverUploader' => $this->displayCoverUploader
         ]);
     }

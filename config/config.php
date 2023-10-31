@@ -9,11 +9,11 @@ return [
             |--------------------------------------------------------------------------
             |
             | The default player type.
-            | Available options: default, vidstack
+            | Available options: DEFAULT, VIDSTACK
             |
             */
 
-            'type' => 'vidstack',
+            'type' => \Mostafaznv\NovaVideo\Enums\NovaVideoPlayerType::VIDSTACK,
 
             /*
             |--------------------------------------------------------------------------
@@ -21,11 +21,11 @@ return [
             |--------------------------------------------------------------------------
             |
             | The default direction for player.
-            | Available options: ltr, rtl
+            | Available options: LTR, RTL
             |
             */
 
-            'dir' => 'ltr'
+            'dir' => \Mostafaznv\NovaVideo\Enums\NovaVideoPlayerDirection::LTR
         ]
     ],
 
