@@ -5,7 +5,7 @@
             :label-for="labelFor"
             :errors="errors"
             :show-errors="false"
-            :show-help-text="!isReadonly && showHelpText"
+            :show-help-text="!currentlyIsReadonly && showHelpText"
             :full-width-content="fullWidthContent"
         >
             <template #field>
@@ -16,6 +16,7 @@
                     :cover="cover"
                     :larupload-is-on="laruploadIsOn"
                     :errors="errors"
+                    :is-readonly="currentlyIsReadonly"
                 />
             </template>
         </DefaultField>
@@ -36,6 +37,7 @@
                     :larupload-is-on="laruploadIsOn"
                     :errors="errors"
                     :is-cover="true"
+                    :is-readonly="currentlyIsReadonly"
                 />
             </div>
         </div>
