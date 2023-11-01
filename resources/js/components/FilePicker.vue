@@ -57,7 +57,8 @@ export default {
     ],
     props: [
         'resourceId', 'resourceName', 'relatedResourceName', 'relatedResourceId',
-        'viaRelationship', 'field', 'cover', 'isCover', 'errors', 'laruploadIsOn'
+        'viaRelationship', 'field', 'cover', 'isCover', 'errors', 'laruploadIsOn',
+        'isReadonly'
     ],
     inject: [
         'removeFile'
