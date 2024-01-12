@@ -10,11 +10,9 @@ This package is an extended version of the built-in Nova file field, designed to
 
 You don't require any additional packages to utilize the `NovaVideo` field. However, if you desire more advanced features, we recommend complementing it with `Larupload`.
 
-<div align="left">
 
-<figure><img src="https://mostafaznv.github.io/donate/donate.svg" alt="" width="188"><figcaption></figcaption></figure>
 
-</div>
+[![Donate](https://mostafaznv.github.io/donate/donate.svg)](https://mostafaznv.github.io/donate)
 
 
 
