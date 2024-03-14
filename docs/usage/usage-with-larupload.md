@@ -16,7 +16,7 @@ In your migration file, add Larupload columns to your table. Here's an example:
 ```php
 <?php
 
-use Mostafaznv\Larupload\LaruploadEnum;
+use Mostafaznv\Larupload\Enums\LaruploadMode;
 
 
 class CreateMediaTable extends Migration
@@ -25,14 +25,12 @@ class CreateMediaTable extends Migration
     {
         Schema::create('media', function (Blueprint $table) {
             $table->id();
-            $table->upload('video', LaruploadEnum::LIGHT_MODE);
+            $table->upload('video', LaruploadMode::LIGHT);
             $table->timestamps();
         });
     }
 }
 ```
-
-
 
 3. **Add Larupload Trait to Your Model:**
 
@@ -64,8 +62,6 @@ class Media extends Model
     }
 }
 ```
-
-
 
 4. **Add NovaVideo Field to Your Resource:**
 
@@ -102,11 +98,11 @@ class Media extends Resource
 }
 ```
 
-
-
 {% hint style="info" %}
 Larupload has its own disk, so the third argument of the make function (disk) is not used when you are using Larupload to handle the upload process.
 {% endhint %}
+
+
 
 
 
