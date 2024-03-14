@@ -38,5 +38,17 @@ return [
     |
     */
 
-    'cover-uploader' => true
+    'cover-uploader' => true,
+
+    /*
+    |--------------------------------------------------------------------------
+    | Mode
+    |--------------------------------------------------------------------------
+    |
+    | The default mode for video field.
+    | Available options: UPLOADED, URL
+    |
+    */
+
+    'mode' => \Mostafaznv\NovaVideo\Enums\NovaVideoMode::UPLOADED,
 ];

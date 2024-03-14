@@ -15,13 +15,14 @@
                     @file-deleted="onDeleteOriginalFile"
                     :cover="cover"
                     :larupload-is-on="laruploadIsOn"
+                    :is-uploaded-mode="isUploadedMode"
                     :errors="errors"
                     :is-readonly="currentlyIsReadonly"
                 />
             </template>
         </DefaultField>
 
-        <div v-show="laruploadIsOn && (file || isEditable) && field.displayCoverUploader && currentlyIsVisible" :class="fieldWrapperClasses">
+        <div v-show="isUploadedMode && laruploadIsOn && (file || isEditable) && field.displayCoverUploader && currentlyIsVisible" :class="fieldWrapperClasses">
             <div :class="labelClasses">
                 <FormLabel class="space-x-1" :label-for="labelFor + '-cover'">
                     <span>{{ field.indexName + ' (' + __('Cover') + ')' }}</span>
@@ -35,6 +36,7 @@
                     v-bind="$props"
                     @file-deleted="onDeleteFile"
                     :larupload-is-on="laruploadIsOn"
+                    :is-uploaded-mode="true"
                     :errors="errors"
                     :is-cover="true"
                     :is-readonly="currentlyIsReadonly"
@@ -85,7 +87,11 @@ export default {
 
         laruploadIsOn() {
             return this.currentField.laruploadIsOn
-        }
+        },
+
+        isUploadedMode() {
+            return this.currentField.mode === 'UPLOADED'
+        },
     },
     watch: {
         file(value) {
@@ -109,17 +115,22 @@ export default {
         this.field.fill = formData => {
             let attribute = this.fieldAttribute
 
-            if (this.laruploadIsOn) {
-                if (this.file) {
-                    formData.append(attribute + '[original]', this.file.originalFile, this.file.name)
-                }
+            if (this.isUploadedMode) {
+                if (this.laruploadIsOn) {
+                    if (this.file) {
+                        formData.append(attribute + '[original]', this.file.originalFile, this.file.name)
+                    }
 
-                if (this.cover) {
-                    formData.append(attribute + '[cover]', this.cover.originalFile, this.cover.name)
+                    if (this.cover) {
+                        formData.append(attribute + '[cover]', this.cover.originalFile, this.cover.name)
+                    }
+                }
+                else if (this.file) {
+                    formData.append(attribute, this.file.originalFile, this.file.name)
                 }
             }
             else if (this.file) {
-                formData.append(attribute, this.file.originalFile, this.file.name)
+                formData.append(attribute, this.file)
             }
         }
     },
