@@ -56,8 +56,19 @@ export default {
             const attribute = this.field.attribute
 
             let link = document.createElement('a')
-            link.href = `/nova-api/${resourceName}/${resourceId}/download/${attribute}`
-            link.download = 'download'
+
+
+            if (this.field.mode === 'URL') {
+                link.href = this.field.thumbnailUrl
+                link.target = '_blank'
+                link.download = link.href.split('/').pop()
+            }
+            else {
+                link.href = `/nova-api/${resourceName}/${resourceId}/download/${attribute}`
+                link.download = 'download'
+            }
+
+
             document.body.appendChild(link)
             link.click()
             document.body.removeChild(link)
