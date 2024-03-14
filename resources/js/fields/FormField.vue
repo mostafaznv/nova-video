@@ -36,7 +36,7 @@
                     v-bind="$props"
                     @file-deleted="onDeleteFile"
                     :larupload-is-on="laruploadIsOn"
-                    :is-uploaded-mode="true"
+                    :is-uploaded-mode="isUploadedMode"
                     :errors="errors"
                     :is-cover="true"
                     :is-readonly="currentlyIsReadonly"
