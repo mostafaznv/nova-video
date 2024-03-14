@@ -6,6 +6,7 @@ use Laravel\Nova\Fields\File;
 use Illuminate\Support\Facades\Storage;
 use Laravel\Nova\Fields\SupportsDependentFields;
 use Laravel\Nova\Http\Requests\NovaRequest;
+use Mostafaznv\NovaVideo\Enums\NovaVideoMode;
 use Mostafaznv\NovaVideo\Enums\NovaVideoPlayerDirection;
 use Mostafaznv\NovaVideo\Enums\NovaVideoPlayerType;
 use Mostafaznv\NovaVideo\Traits\HandlesValidation;
@@ -22,6 +23,7 @@ class Video extends File
     protected bool $storeWithLarupload   = false;
     protected bool $displayCoverUploader = true;
 
+    protected NovaVideoMode            $mode       = NovaVideoMode::UPLOADED;
     protected NovaVideoPlayerDirection $dir        = NovaVideoPlayerDirection::LTR;
     protected NovaVideoPlayerType      $playerType = NovaVideoPlayerType::VIDSTACK;
 
@@ -31,6 +33,7 @@ class Video extends File
         parent::__construct($label, $fieldName, $disk, $storageCallback);
 
 
+        $this->mode = config('nova-video.mode');
         $this->dir = config('nova-video.ui.player.dir');
         $this->playerType = config('nova-video.ui.player.type');
         $this->displayCoverUploader = config('nova-video.cover-uploader');
@@ -43,6 +46,10 @@ class Video extends File
         });
 
         $this->preview(function($value, $disk, $model) {
+            if ($this->mode == NovaVideoMode::URL) {
+                return $value;
+            }
+
             if ($this->storeWithLarupload) {
                 if ($model->id) {
                     $this->value = $model->attachment($this->attribute)->url();
@@ -65,7 +72,7 @@ class Video extends File
                     : null;
             }
 
-            return null;
+            return $value;
         });
 
         $this->delete(function(NovaRequest $request, $model) {
@@ -103,6 +110,15 @@ class Video extends File
 
     protected function fillAttribute(NovaRequest $request, $requestAttribute, $model, $attribute)
     {
+        if ($this->mode == NovaVideoMode::URL) {
+
+            if (isset($this->fillCallback)) {
+                return call_user_func($this->fillCallback, $request, $model, $attribute, $requestAttribute);
+            }
+
+            return $this->fillAttributeFromRequest($request, $requestAttribute, $model, $attribute);
+        }
+
         if ($this->storeWithLarupload) {
             $this->validate($request, $attribute);
 
@@ -118,7 +134,6 @@ class Video extends File
                 $requestAttribute = $coverAttribute;
             }
         }
-
 
         return parent::fillAttribute($request, $requestAttribute, $model, $attribute);
     }
@@ -151,6 +166,13 @@ class Video extends File
         return $this;
     }
 
+    public function mode(NovaVideoMode $mode): self
+    {
+        $this->mode = $mode;
+
+        return $this;
+    }
+
     public function dir(NovaVideoPlayerDirection $dir): self
     {
         $this->dir = $dir;
@@ -176,9 +198,10 @@ class Video extends File
     {
         return array_merge(parent::jsonSerialize(), [
             'laruploadIsOn'        => $this->storeWithLarupload,
+            'mode'                 => $this->mode->name,
             'dir'                  => $this->dir->name,
             'playerType'           => $this->playerType->name,
-            'displayCoverUploader' => $this->displayCoverUploader
+            'displayCoverUploader' => $this->displayCoverUploader,
         ]);
     }
 }

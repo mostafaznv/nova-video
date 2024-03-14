@@ -1,12 +1,12 @@
 ---
-description: playerType
+description: mode
 ---
 
-# Player Type
+# Player Mode
 
-<table><thead><tr><th width="167">Argument</th><th width="157">Type</th><th width="159" data-type="checkbox">Required</th><th>Accepted Values</th></tr></thead><tbody><tr><td>type</td><td>enum</td><td>true</td><td><code>VIDSTACK</code>, <code>DEFAULT</code></td></tr></tbody></table>
+<table><thead><tr><th width="167">Argument</th><th width="157">Type</th><th width="159" data-type="checkbox">Required</th><th>Accepted Values</th></tr></thead><tbody><tr><td>mode</td><td>enum</td><td>true</td><td><code>UPLOADED</code>, <code>URL</code></td></tr></tbody></table>
 
-Starting from <mark style="color:red;">v6.0</mark>, the Video field uses the [vidstack](https://www.vidstack.io/) video player as the default option for displaying videos. However, you still have the flexibility to choose the default HTML player if you prefer it. The choice is yours, and you can easily select your preferred player type to enhance your video playback experience.
+Beginning with <mark style="color:red;">v6.2</mark>, the Video field now supports URLs in addition to files. If you need to display videos from plain URLs, the URL mode is tailored for your requirements. It replaces the file uploader with a text field for ease of input.
 
 ```php
 <?php
@@ -15,7 +15,7 @@ namespace App\Nova;
 
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\ID;
-use Mostafaznv\NovaVideo\Enums\NovaVideoPlayerType;
+use Mostafaznv\NovaVideo\Enums\NovaVideoMode;
 use Mostafaznv\NovaVideo\Video;
 use App\Models\Media as MediaModel;
 
@@ -30,8 +30,8 @@ class Media extends Resource
         return [
             ID::make()->sortable(),
 
-            Video::make(trans('Video'), 'video', 'media')
-                ->playerType(NovaVideoPlayerType::DEFAULT),
+            Video::make(trans('Video'), 'video')
+                ->mode(NovaVideoMode::URL),
         ];
     }
 }

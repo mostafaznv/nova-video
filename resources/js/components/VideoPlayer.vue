@@ -6,7 +6,6 @@
             class="media-player"
             :title="title"
             :src="src"
-            crossorigin
         >
             <media-poster v-if="poster" class="vds-poster" :src="poster" :alt="title" />
             <media-provider/>

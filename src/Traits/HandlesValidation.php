@@ -3,6 +3,7 @@
 namespace Mostafaznv\NovaVideo\Traits;
 
 use Laravel\Nova\Http\Requests\NovaRequest;
+use Mostafaznv\NovaVideo\Enums\NovaVideoMode;
 
 
 trait HandlesValidation
@@ -36,7 +37,7 @@ trait HandlesValidation
     {
         parent::rules($rules);
 
-        if ($this->storeWithLarupload) {
+        if ($this->mode === NovaVideoMode::UPLOADED and $this->storeWithLarupload) {
             $this->novaVideoRules = $this->rules;
             $this->rules = [];
         }
@@ -51,7 +52,7 @@ trait HandlesValidation
     {
         parent::creationRules($rules);
 
-        if ($this->storeWithLarupload) {
+        if ($this->mode === NovaVideoMode::UPLOADED and $this->storeWithLarupload) {
             $this->novaVideoCreationRules = $this->creationRules;
             $this->creationRules = [];
         }
@@ -66,7 +67,7 @@ trait HandlesValidation
     {
         parent::updateRules($rules);
 
-        if ($this->storeWithLarupload) {
+        if ($this->mode === NovaVideoMode::UPLOADED and $this->storeWithLarupload) {
             $this->novaVideoUpdateRules = $this->updateRules;
             $this->updateRules = [];
         }
@@ -115,7 +116,7 @@ trait HandlesValidation
      */
     public function validationKey(): string
     {
-        if ($this->storeWithLarupload) {
+        if ($this->mode === NovaVideoMode::UPLOADED and $this->storeWithLarupload) {
             return "$this->attribute.original";
         }
 

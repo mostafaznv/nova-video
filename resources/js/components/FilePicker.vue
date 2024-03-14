@@ -1,29 +1,40 @@
 <template>
     <div class="space-y-4">
-        <div v-if="hasValue && previewFile && files.length === 0" class="grid grid-cols-4 gap-x-6 gap-y-2">
-            <FilePreviewBlock
-                v-if="previewFile"
-                :file="previewFile"
-                :removable="shouldShowRemoveButton"
-                @removed="confirmRemoval"
-                :rounded="field.rounded"
+        <template v-if="isUploadedMode">
+            <div v-if="hasValue && previewFile && files.length === 0" class="grid grid-cols-4 gap-x-6 gap-y-2">
+                <FilePreviewBlock
+                    v-if="previewFile"
+                    :file="previewFile"
+                    :removable="shouldShowRemoveButton"
+                    @removed="confirmRemoval"
+                    :rounded="field.rounded"
+                />
+            </div>
+
+            <ConfirmUploadRemovalModal
+                :show="removeModalOpen"
+                @confirm="removeUploadedFile"
+                @close="closeRemoveModal"
             />
-        </div>
 
-        <ConfirmUploadRemovalModal
-            :show="removeModalOpen"
-            @confirm="removeUploadedFile"
-            @close="closeRemoveModal"
-        />
+            <DropZone
+                v-if="shouldShowField"
+                :files="files"
+                @file-changed="handleFileChange"
+                @file-removed="file = null"
+                :rounded="field.rounded"
+                :accepted-types="acceptedTypes"
+                :disabled="file?.processing"
+            />
+        </template>
 
-        <DropZone
-            v-if="shouldShowField"
-            :files="files"
-            @file-changed="handleFileChange"
-            @file-removed="file = null"
-            :rounded="field.rounded"
-            :accepted-types="acceptedTypes"
-            :disabled="file?.processing"
+        <input
+            v-else
+            v-model="link"
+            class="w-full form-control form-input form-control-bordered"
+            :id="field.uniqueKey"
+            :disabled="isReadonly"
+            :maxlength="field.enforceMaxlength ? field.maxlength : -1"
         />
 
         <HelpText class="help-text-error" v-if="hasError">
@@ -58,7 +69,7 @@ export default {
     props: [
         'resourceId', 'resourceName', 'relatedResourceName', 'relatedResourceId',
         'viaRelationship', 'field', 'cover', 'isCover', 'errors', 'laruploadIsOn',
-        'isReadonly'
+        'isReadonly', 'isUploadedMode'
     ],
     inject: [
         'removeFile'
@@ -67,24 +78,27 @@ export default {
         'beforeRemove',
         'afterRemove'
     ],
-    data: () => ({
-        file: null,
-        previewFile: null,
-        thumbnailFile: null,
-        fileName: '',
-        thumbnailFileName: '',
-        removeModalOpen: false,
-        missing: false,
-        deleted: false,
-        src: null,
-        uploadErrors: new Errors(),
-        uploading: false,
-        thumbnailUploading: false,
-        uploadProgress: 0,
-        thumbnailUploadProgress: 0,
-        startedDrag: false,
-        uploadModalShown: false,
-    }),
+    data() {
+        return {
+            link: this.field.value,
+            file: null,
+            previewFile: null,
+            thumbnailFile: null,
+            fileName: '',
+            thumbnailFileName: '',
+            removeModalOpen: false,
+            missing: false,
+            deleted: false,
+            src: null,
+            uploadErrors: new Errors(),
+            uploading: false,
+            thumbnailUploading: false,
+            uploadProgress: 0,
+            thumbnailUploadProgress: 0,
+            startedDrag: false,
+            uploadModalShown: false,
+        }
+    },
     computed: {
         value() {
             if (this.isCover) {
@@ -155,14 +169,24 @@ export default {
         file: {
             immediate: true,
             handler(file) {
-                this.$emit('update:modelValue', file)
+                if (this.isUploadedMode) {
+                    this.$emit('update:modelValue', file)
+                }
+            }
+        },
+        link: {
+            immediate: true,
+            handler(link) {
+                if (!this.isUploadedMode) {
+                    this.$emit('update:modelValue', link)
+                }
             }
         },
         errors: {
             immediate: true,
             handler(e) {
                 const attribute =
-                    this.laruploadIsOn
+                    (this.laruploadIsOn && this.isUploadedMode)
                         ? this.isCover
                             ? this.fieldAttribute + '.cover'
                             : this.fieldAttribute + '.original'
@@ -183,15 +207,17 @@ export default {
     },
     methods: {
         preparePreviewImage() {
-            if (this.hasValue && this.imageUrl) {
-                this.fetchPreviewImage()
-            }
+            if (this.isUploadedMode) {
+                if (this.hasValue && this.imageUrl) {
+                    this.fetchPreviewImage()
+                }
 
-            if (this.hasValue && !this.imageUrl) {
-                this.previewFile = createFile({
-                    name: this.value,
-                    type: this.value.split('.').pop(),
-                })
+                if (this.hasValue && !this.imageUrl) {
+                    this.previewFile = createFile({
+                        name: this.value,
+                        type: this.value.split('.').pop(),
+                    })
+                }
             }
         },
 
