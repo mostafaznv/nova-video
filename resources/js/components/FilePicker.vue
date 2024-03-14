@@ -31,7 +31,7 @@
         <input
             v-else
             v-model="link"
-            class="w-full form-control form-input form-input-bordered"
+            class="w-full form-control form-input form-control-bordered"
             :id="field.uniqueKey"
             :disabled="isReadonly"
             :maxlength="field.enforceMaxlength ? field.maxlength : -1"
