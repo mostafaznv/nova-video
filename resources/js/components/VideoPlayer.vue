@@ -1,5 +1,5 @@
 <template>
-    <div class="video" :dir="dir" :class="[type, {small: !isDetails}]">
+    <div class="video" :dir="dir" :class="[type.toLowerCase(), {small: !isDetails}]">
         <media-player
             v-if="type === 'VIDSTACK'"
             @click.stop.prevent
@@ -53,6 +53,10 @@ const props = defineProps({
             return ['VIDSTACK', 'DEFAULT'].includes(value)
         }
     },
+    maxHeight: {
+        type: String,
+        default: 'auto'
+    },
     isDetails: {
         type: Boolean,
         required: true
@@ -73,9 +77,12 @@ const title = computed(() => {
     min-width: 300px;
     display: inline-block;
 
-
     &.small {
         max-width: 270px;
+    }
+
+    video, ::v-deep(.media-player) video {
+        max-height: v-bind(maxHeight);
     }
 
     ::v-deep(.vds-poster) {

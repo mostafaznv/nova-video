@@ -23,9 +23,11 @@ class Video extends File
     protected bool $storeWithLarupload   = false;
     protected bool $displayCoverUploader = true;
 
-    protected NovaVideoMode            $mode       = NovaVideoMode::UPLOADED;
+    protected NovaVideoMode $mode = NovaVideoMode::UPLOADED;
+
     protected NovaVideoPlayerDirection $dir        = NovaVideoPlayerDirection::LTR;
     protected NovaVideoPlayerType      $playerType = NovaVideoPlayerType::VIDSTACK;
+    protected string                   $maxHeight  = 'auto';
 
 
     public function __construct($label, $fieldName = null, $disk = 'public', $storageCallback = null)
@@ -36,6 +38,7 @@ class Video extends File
         $this->mode = config('nova-video.mode');
         $this->dir = config('nova-video.ui.player.dir');
         $this->playerType = config('nova-video.ui.player.type');
+        $this->maxHeight = config('nova-video.ui.player.max-height', '160px');
         $this->displayCoverUploader = config('nova-video.cover-uploader');
 
 
@@ -187,6 +190,13 @@ class Video extends File
         return $this;
     }
 
+    public function maxHeight(string $height): self
+    {
+        $this->maxHeight = $height;
+
+        return $this;
+    }
+
     public function hideCoverUploader(bool $status = true): self
     {
         $this->displayCoverUploader = !$status;
@@ -201,6 +211,7 @@ class Video extends File
             'mode'                 => $this->mode->name,
             'dir'                  => $this->dir->name,
             'playerType'           => $this->playerType->name,
+            'maxHeight'            => $this->maxHeight,
             'displayCoverUploader' => $this->displayCoverUploader,
         ]);
     }
