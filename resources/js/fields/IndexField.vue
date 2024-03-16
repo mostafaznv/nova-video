@@ -6,6 +6,7 @@
             :poster="poster"
             :type="field.playerType"
             :dir="field.dir"
+            :max-height="field.maxHeight"
             :is-details="false"
         />
 
