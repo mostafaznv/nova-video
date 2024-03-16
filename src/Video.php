@@ -75,7 +75,7 @@ class Video extends File
                     : null;
             }
 
-            return $value;
+            return null;
         });
 
         $this->delete(function(NovaRequest $request, $model) {
