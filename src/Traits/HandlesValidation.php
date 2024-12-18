@@ -78,7 +78,7 @@ trait HandlesValidation
     /**
      * @inheritDoc
      */
-    public function isRequired(NovaRequest $request)
+    public function isRequired(NovaRequest $request): bool
     {
         if (!$this->storeWithLarupload) {
             return parent::isRequired($request);
