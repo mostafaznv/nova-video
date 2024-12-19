@@ -111,7 +111,7 @@ class Video extends File
         $this->prunable();
     }
 
-    protected function fillAttribute(NovaRequest $request, string $requestAttribute, object $model, string $attribute): mixed
+    protected function fillAttribute(NovaRequest $request, $requestAttribute, $model, $attribute): mixed
     {
         if ($this->mode == NovaVideoMode::URL) {
 
