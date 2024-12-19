@@ -13,22 +13,30 @@
             <span v-else>&mdash;</span>
 
             <p v-if="shouldShowToolbar" class="flex items-center text-sm mt-3">
-                <link-button v-if="field.downloadable" @keydown.enter.prevent="download" @click.prevent="download" :dusk="field.attribute + '-download-link'" tabindex="0">
-                    <icon class="mr-2" type="download" width="16" height="16" />
+                <Button
+                    v-if="field.downloadable"
+                    @keydown.enter.prevent="download"
+                    @click.prevent="download"
+                    variant="ghost"
+                    tabindex="0"
+                    :dusk="field.attribute + '-download-link'"
+                >
+                    <Icon name="arrow-down-tray" type="mini" class="mr-2" />
                     <span class="class mt-1">{{ __('Download') }}</span>
-                </link-button>
+                </Button>
             </p>
         </template>
     </panel-item>
 </template>
 
 <script>
+import {Button, Icon} from 'laravel-nova-ui'
 import VideoPlayer from '../components/VideoPlayer.vue'
 
 
 export default {
     components: {
-        VideoPlayer
+        VideoPlayer, Button, Icon
     },
     props: ['resource', 'resourceName', 'resourceId', 'field', 'index'],
     data() {
